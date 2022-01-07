@@ -1,0 +1,2 @@
+# CI "inspired" opensimrt docker
+
