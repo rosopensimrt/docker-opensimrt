@@ -38,8 +38,8 @@ RUN git pull && git checkout devel && bash build.sh&& \
 
 	echo "git pull && git checkout devel && bash /opensimrt/build/build.sh" >> ~/.bash_history
 
-RUN apt install vim nano -y
+RUN apt update && apt install vim nano python -y
 
-ADD server.c /opensimrt/build/tmp/
+ADD  connect/ /opensimrt/connect/
 
 EXPOSE 8080/udp
