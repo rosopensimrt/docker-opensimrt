@@ -35,4 +35,11 @@ RUN echo ". /opensimrt/env.sh && cmake ../ \
 ENV LD_LIBRARY_PATH=/opt/dependencies/opensim-core/lib/:/opensimrt/build/
 
 RUN git pull && git checkout devel && bash build.sh&& \
+
 	echo "git pull && git checkout devel && bash /opensimrt/build/build.sh" >> ~/.bash_history
+
+RUN apt install vim nano -y
+
+ADD server.c /opensimrt/build/tmp/
+
+EXPOSE 8080/udp

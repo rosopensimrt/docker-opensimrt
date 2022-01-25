@@ -1,1 +1,1 @@
-docker build . -t mysablehats/opensim-rt:latest
+docker build . -t mysablehats/opensim-rt:devel
