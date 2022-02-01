@@ -8,7 +8,7 @@ if [ "$(uname)" == "Darwin" ]; then
 		mysablehats/opensim-rt:latest
 elif [ "$(expr substr $(uname -s) 1 5)" == "Linux" ]; then
     # Do something under GNU/Linux platform
-	docker run --rm -it\
+	docker run --rm -it -p 8080:8080/udp \
 		-e DISPLAY=$DISPLAY -v /tmp/.X11-unix:/tmp/.X11-unix \
 		--device=/dev/dri:/dev/dri \
 		mysablehats/opensim-rt:devel
