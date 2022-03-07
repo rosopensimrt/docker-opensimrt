@@ -13,6 +13,17 @@ Run with:
 
     $ bash run_docker_image.sh
 
+# Docker builds
+
+If instead you just want to use the already built docker image, you get it [here](https://hub.docker.com/r/mysablehats/opensim-rt/tags). We are not freezing versions, so it is possible that this will break in the future. 
+
+The docker with the default version from mitkof6/OpenSIMRT can be obtained with: 
+
+     docker pull mysablehats/opensim-rt:main
+
+It can also be directly accessed [here](https://hub.docker.com/layers/mysablehats/opensim-rt/main/images/sha256-f3f238759e736f2fd01b9a1eec307b9dbe664f97206e438541bb2685b9fcb38e).
+
+# Windows Users:
 
 To show graphics make sure you have either Xming or vcxsrv installed and running. 
 
