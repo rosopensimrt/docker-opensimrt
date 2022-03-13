@@ -23,6 +23,15 @@ The docker with the default version from mitkof6/OpenSIMRT can be obtained with:
 
 It can also be directly accessed [here](https://hub.docker.com/layers/mysablehats/opensim-rt/main/images/sha256-f3f238759e736f2fd01b9a1eec307b9dbe664f97206e438541bb2685b9fcb38e).
 
+# Linux Users:
+
+You need to allow "remote" connections to your X server:
+
+    $ xhost +
+
+Everything else should just work. If it doesn't open an issue.  
+
+
 # Windows Users:
 
 To show graphics make sure you have either Xming or vcxsrv installed and running. 
