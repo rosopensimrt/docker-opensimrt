@@ -39,7 +39,9 @@ RUN git pull && git checkout sometimes_it_works && bash build.sh && \
 
 	echo "git pull && git checkout sometimes_it_works && cd /opensimrt/build && bash build.sh" >> ~/.bash_history
 
-RUN apt update && apt install vim python ros-noetic-desktop-full -y
+ENV DEBIAN_FRONTEND=noninteractive
+
+RUN apt-get update && apt-get install vim python ros-noetic-desktop-full -y
 
 ADD  connect/ /opensimrt/connect/
 
