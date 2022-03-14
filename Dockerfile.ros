@@ -35,9 +35,9 @@ RUN echo ". /opensimrt/env.sh && cmake ../ \
 	
 ENV LD_LIBRARY_PATH=/opt/dependencies/opensim-core/lib/:/opensimrt/build/
 
-RUN git pull && git checkout incdserv && bash build.sh && \
+RUN git pull && git checkout sometimes_it_works && bash build.sh && \
 
-	echo "git pull && git checkout incdserv && cd /opensimrt/build && bash build.sh" >> ~/.bash_history
+	echo "git pull && git checkout sometimes_it_works && cd /opensimrt/build && bash build.sh" >> ~/.bash_history
 
 RUN apt update && apt install vim python -y
 

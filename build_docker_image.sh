@@ -1,1 +1,1 @@
-docker build . -t mysablehats/opensim-rt:devel
+docker build . -f Dockerfile.ros -t mysablehats/opensim-rt:$(git branch --show-current )

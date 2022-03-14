@@ -44,8 +44,8 @@ class Sender:
     def loopsend(self):
 
         for i,msg in enumerate(self.getreadfromcsv()):
-            if i > 200:
-                break
+            #if i > 200:
+            #    break
             print(msg)
             bytesToSend = str.encode(msg)
             # Send to server using created UDP socket
