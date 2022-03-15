@@ -15,7 +15,7 @@ now = str(time.time()) + " "
 
 class Sender:
     def __init__(self, FILENAME):
-        self.serverAddressPort   = ("0.0.0.0", 8080 )
+        self.serverAddressPort   = ("127.0.0.1", 8080 )
         self.bufferSize          = 4096
         # Create a UDP socket at client side
         self.UDPClientSocket = socket.socket(family=socket.AF_INET, type=socket.SOCK_DGRAM)
@@ -44,8 +44,8 @@ class Sender:
     def loopsend(self):
 
         for i,msg in enumerate(self.getreadfromcsv()):
-            if i > 200:
-                break
+            #if i > 200:
+            #    break
             print(msg)
             bytesToSend = str.encode(msg)
             # Send to server using created UDP socket
