@@ -47,7 +47,7 @@ ADD  connect/ /opensimrt/connect/
 
 EXPOSE 8080/udp
 
-RUN git checkout ros_bs
+RUN git pull && git checkout ros_bs
 
 #FROM ros:noetic-ros-base
 
