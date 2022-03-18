@@ -20,7 +20,7 @@ elif [ "$(expr substr $(uname -s) 1 10)" == "MINGW32_NT" ]; then
 		mysablehats/opensim-rt:$BRANCH
 elif [ "$(expr substr $(uname -s) 1 10)" == "MINGW64_NT" ]; then
     # Do something under 64 bits Windows NT platform
-	winpty docker run --rm -it \
+	winpty docker run --rm -it -p 8080:8080/udp \
 		-e DISPLAY=$DISPLAY -v /tmp/.X11-unix:/tmp/.X11-unix \
 		mysablehats/opensim-rt:$BRANCH
 
