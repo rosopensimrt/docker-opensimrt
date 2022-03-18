@@ -47,6 +47,12 @@ ADD  connect/ /opensimrt/connect/
 
 EXPOSE 8080/udp
 
+ENV PYTHONPATH=/opt/ros/noetic/lib/python3/dist-packages/:$PYTHONPATH
+
+RUN mkdir -p /opensimrt/build/devel/ && \
+	ln -s /opt/ros/noetic/share/ /opensimrt/build/devel/share && \
+	ln -s /opt/ros/noetic/include/ /opensimrt/build/devel/include
+
 RUN git pull && git checkout ros_bs
 
 #FROM ros:noetic-ros-base
