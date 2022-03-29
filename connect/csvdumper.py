@@ -14,13 +14,14 @@ import csv
 now = str(time.time()) + " "
 
 class Sender:
-    def __init__(self, FILENAME, hostname="0.0.0.0", period = 0.01):
+    def __init__(self, FILENAME, hostname="0.0.0.0", period = 0.01, repeat = False):
         self.serverAddressPort   = (hostname, 8080 )
         self.bufferSize          = 4096
         self.period = period # in seconds
         # Create a UDP socket at client side
         self.UDPClientSocket = socket.socket(family=socket.AF_INET, type=socket.SOCK_DGRAM)
         self.FILENAME= FILENAME
+        self.repeat = repeat
 
     def genmsg(self):
         NUM_IMU = 10
@@ -30,16 +31,24 @@ class Sender:
 
     def getreadfromcsv(self):
         with open(self.FILENAME) as csvfile:
-            line = csv.reader(csvfile)
-            next(line) ## trying to skip the header
-            next(line) ## trying to skip the header
-            next(line) ## trying to skip the header
-            next(line) ## trying to skip the header
+            while(True):
+                line = csv.reader(csvfile)
+                next(line) ## trying to skip the header
+                next(line) ## trying to skip the header
+                next(line) ## trying to skip the header
+                next(line) ## trying to skip the header
             
-            next(line) ## this line has the actual labels, if you want them
-            for a in line:
-            # like use as a generator?
-                yield " ".join(a) 
+                next(line) ## this line has the actual labels, if you want them
+                for a in line:
+                    if self.repeat:
+                        ## need to use actual time, or it will break when i loop
+                        a[0]=str(time.time())
+                    # like use as a generator?
+                    yield " ".join(a)
+                if self.repeat:
+                    csvfile.seek(0)
+                else:
+                    break
 
     #bytesToSend         = str.encode(msgFromClient)
     def loopsend(self):
