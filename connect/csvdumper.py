@@ -14,9 +14,10 @@ import csv
 now = str(time.time()) + " "
 
 class Sender:
-    def __init__(self, FILENAME):
-        self.serverAddressPort   = ("0.0.0.0", 8080 )
+    def __init__(self, FILENAME, hostname="0.0.0.0", period = 0.01):
+        self.serverAddressPort   = (hostname, 8080 )
         self.bufferSize          = 4096
+        self.period = period # in seconds
         # Create a UDP socket at client side
         self.UDPClientSocket = socket.socket(family=socket.AF_INET, type=socket.SOCK_DGRAM)
         self.FILENAME= FILENAME
@@ -53,11 +54,11 @@ class Sender:
             msgFromServer = self.UDPClientSocket.recvfrom(self.bufferSize)
             msg_rec = "Message from Server {}".format(msgFromServer[0])
             print(msg_rec)
-            time.sleep(0.01)
+            time.sleep(self.period)
         self.UDPClientSocket.sendto(str.encode("BYE!"), self.serverAddressPort)
         print("finished!")
 
 if __name__ == "__main__":
 
-    A = Sender("gait1992_imu.csv")
+    A = Sender("gait1992_imu.csv", hostname="0.0.0.0", period=0.06)
     A.loopsend()
