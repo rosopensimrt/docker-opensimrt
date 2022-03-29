@@ -8,9 +8,10 @@ if [ "$(uname)" == "Darwin" ]; then
 		mysablehats/opensim-rt:$BRANCH
 elif [ "$(expr substr $(uname -s) 1 5)" == "Linux" ]; then
     # Do something under GNU/Linux platform
-	docker run --rm -it \
+	docker run --rm -it -p 8080:8080/udp \
 		-e DISPLAY=$DISPLAY -v /tmp/.X11-unix:/tmp/.X11-unix \
 		--device=/dev/dri:/dev/dri \
+		--device=/dev/video0:/dev/video0 \
 		mysablehats/opensim-rt:$BRANCH
 elif [ "$(expr substr $(uname -s) 1 10)" == "MINGW32_NT" ]; then
     # Do something under 32 bits Windows NT platform

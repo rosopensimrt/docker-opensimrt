@@ -1,6 +1,6 @@
-FROM ubuntu:18.04
+FROM ros:noetic-ros-base
 
-RUN apt-get update && apt-get install build-essential freeglut3-dev git libxi-dev libxmu-dev liblapack-dev doxygen cmake wget xz-utils --yes
+RUN apt-get update && apt-get install build-essential freeglut3-dev git libxi-dev libxmu-dev liblapack-dev doxygen cmake wget xz-utils --yes && rm -rf /var/lib/apt/lists/*
 WORKDIR /opt/dependencies
 
 RUN wget https://sourceforge.net/projects/dependencies/files/opensim-core/opensim-core-4.1-ubuntu-18.04.tar.xz && \
@@ -39,8 +39,25 @@ RUN git pull && git checkout sometimes_it_works && bash build.sh && \
 
 	echo "git pull && git checkout sometimes_it_works && cd /opensimrt/build && bash build.sh" >> ~/.bash_history
 
-RUN apt update && apt install vim python gdb -y
+ENV DEBIAN_FRONTEND=noninteractive
+
+RUN apt-get update && apt-get install vim python ros-noetic-desktop-full -y
 
 ADD  connect/ /opensimrt/connect/
 
 EXPOSE 8080/udp
+
+ENV PYTHONPATH=/opt/ros/noetic/lib/python3/dist-packages/:$PYTHONPATH
+
+RUN mkdir -p /opensimrt/build/devel/ && \
+	ln -s /opt/ros/noetic/share/ /opensimrt/build/devel/share && \
+	ln -s /opt/ros/noetic/include/ /opensimrt/build/devel/include
+
+RUN git pull && git checkout ros_bs
+
+#FROM ros:noetic-ros-base
+
+#COPY --from=0 /opt/dependencies /opt/dependencies
+#COPY --from=0 /opensimrt /opt/opensimrt
+ADD catkin.sh /opensimrt
+ADD catkin/ar_test /catkin_ws/src/ar_test
