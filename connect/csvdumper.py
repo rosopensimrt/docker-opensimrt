@@ -7,6 +7,7 @@ Spyder Editor
 This is a temporary script file.
 """
 
+import sys, traceback
 import socket
 import time
 import csv
@@ -52,20 +53,36 @@ class Sender:
 
     #bytesToSend         = str.encode(msgFromClient)
     def loopsend(self):
+        #try:
+            self.UDPClientSocket.settimeout(0.1)
+            
+            for i,msg in enumerate(self.getreadfromcsv()):
+                #if i > 200:
+                #    break
+                print(msg)
+                bytesToSend = str.encode(msg)
+                # Send to server using created UDP socket
+                RECVOK = False
+                while not RECVOK:
+                    try:
 
-        for i,msg in enumerate(self.getreadfromcsv()):
-            #if i > 200:
-            #    break
-            print(msg)
-            bytesToSend = str.encode(msg)
-            # Send to server using created UDP socket
-            self.UDPClientSocket.sendto(bytesToSend, self.serverAddressPort)
-            msgFromServer = self.UDPClientSocket.recvfrom(self.bufferSize)
-            msg_rec = "Message from Server {}".format(msgFromServer[0])
-            print(msg_rec)
-            time.sleep(self.period)
-        self.UDPClientSocket.sendto(str.encode("BYE!"), self.serverAddressPort)
-        print("finished!")
+                        self.UDPClientSocket.sendto(bytesToSend, self.serverAddressPort)
+                        msgFromServer = self.UDPClientSocket.recvfrom(self.bufferSize)
+                        RECVOK = True
+                    except socket.timeout:
+                        print("stuck!")
+                        time.sleep(self.period/2)
+                        pass
+                        
+                msg_rec = "Message from Server {}".format(msgFromServer[0])
+                print(msg_rec)
+                time.sleep(self.period)
+            self.UDPClientSocket.sendto(str.encode("BYE!"), self.serverAddressPort)
+            print("finished!")
+        #except:
+        #    traceback.print_exc(file=sys.stdout)
+
+
 
 if __name__ == "__main__":
 

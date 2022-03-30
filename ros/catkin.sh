@@ -1,3 +1,5 @@
+. /opt/ros/noetic/setup.sh
+
 mkdir -p /catkin_ws/src
 
 cd /catkin_ws/src
