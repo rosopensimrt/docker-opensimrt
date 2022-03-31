@@ -43,7 +43,7 @@ ENV DEBIAN_FRONTEND=noninteractive
 
 RUN apt-get update && apt-get install vim python ros-noetic-desktop-full -y
 
-ADD  connect/ /opensimrt/connect/
+#ADD  connect/ /opensimrt/connect/
 
 EXPOSE 8080/udp
 
@@ -53,12 +53,11 @@ RUN mkdir -p /opensimrt/build/devel/ && \
 	ln -s /opt/ros/noetic/share/ /opensimrt/build/devel/share && \
 	ln -s /opt/ros/noetic/include/ /opensimrt/build/devel/include
 
-RUN git pull && git checkout ros_bs
+RUN git pull && git checkout ros_bs 
 
-#FROM ros:noetic-ros-base
+WORKDIR /opensimrt
 
-#COPY --from=0 /opt/dependencies /opt/dependencies
-#COPY --from=0 /opensimrt /opt/opensimrt
-#ADD ros/ar_test /catkin_ws/src/ar_test
+RUN git clone https://github.com/frederico-klein/imu_driver.git 
+
 ADD ros       /opensimrt
 RUN /opensimrt/catkin.sh
