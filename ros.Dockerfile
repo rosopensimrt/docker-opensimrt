@@ -59,6 +59,6 @@ RUN git pull && git checkout ros_bs
 
 #COPY --from=0 /opt/dependencies /opt/dependencies
 #COPY --from=0 /opensimrt /opt/opensimrt
-ADD ros/ar_test /catkin_ws/src/ar_test
+#ADD ros/ar_test /catkin_ws/src/ar_test
 ADD ros       /opensimrt
 RUN /opensimrt/catkin.sh
