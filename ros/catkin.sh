@@ -10,5 +10,7 @@ git clone https://github.com/ros-drivers/usb_cam.git
 
 git clone https://github.com/mysablehats/ar_test.git 
 
+git clone https://github.com/CCNYRoboticsLab/imu_tools
+
 cd ..
 catkin_make
