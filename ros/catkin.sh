@@ -12,5 +12,7 @@ git clone https://github.com/mysablehats/ar_test.git
 
 git clone https://github.com/CCNYRoboticsLab/imu_tools
 
+git clone https://github.com/mysablehats/cometa_bridge.git
+
 cd ..
 catkin_make
