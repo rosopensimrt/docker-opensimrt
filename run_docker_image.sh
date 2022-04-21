@@ -14,6 +14,7 @@ elif [ "$(expr substr $(uname -s) 1 5)" == "Linux" ]; then
 		-e DISPLAY=$DISPLAY -v /tmp/.X11-unix:/tmp/.X11-unix \
 		--device=/dev/dri:/dev/dri \
 		--device=/dev/video0:/dev/video0 \
+		-v $(pwd)/ros:/catkin_ws \
 		mysablehats/opensim-rt:$BRANCH /bin/bash
 elif [ "$(expr substr $(uname -s) 1 10)" == "MINGW32_NT" ]; then
     # Do something under 32 bits Windows NT platform

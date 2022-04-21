@@ -64,4 +64,7 @@ RUN /opensimrt/catkin.sh
 
 ADD entrypoint.sh /bin/entrypoint.sh 
 
+## TODO: this needs to be reshuffled so we reduce the number of layers
+RUN apt-get install v4l-utils -y
+
 ENTRYPOINT [ "entrypoint.sh" ]
