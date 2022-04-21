@@ -59,8 +59,8 @@ WORKDIR /opensimrt
 
 RUN git clone https://github.com/frederico-klein/imu_driver.git 
 
-ADD ros       /opensimrt
-RUN /opensimrt/catkin.sh
+#ADD ros       /opensimrt
+#RUN /opensimrt/catkin.sh
 
 ADD entrypoint.sh /bin/entrypoint.sh 
 

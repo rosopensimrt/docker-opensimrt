@@ -1,5 +1,6 @@
 BRANCH=$(git branch --show-current )
-
+mkdir -p ros/devel
+mkdir -p ros/build
 
 if [ "$(uname)" == "Darwin" ]; then
     # Do something under Mac OS X platform        
