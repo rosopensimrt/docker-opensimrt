@@ -53,7 +53,7 @@ RUN mkdir -p /opensimrt/build/devel/ && \
 	ln -s /opt/ros/noetic/share/ /opensimrt/build/devel/share && \
 	ln -s /opt/ros/noetic/include/ /opensimrt/build/devel/include
 
-RUN git pull && git checkout ros_ar
+RUN git pull && git checkout ros_fixing_cube
 
 WORKDIR /opensimrt
 
