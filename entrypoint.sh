@@ -3,10 +3,10 @@ set -e
 
 source /opt/ros/noetic/setup.bash
 roscore &
-cd build
-bash build.sh
+#cd build
+#bash build.bash
 cd ..
-if [ -f "/catkin_ws/devel/setup.bash" ]
+if [[ -f "/catkin_ws/devel/setup.bashh" ]]; then
  #rviz -d ./default.rviz &
  rviz -d ./cam_tf.rviz &
  source /catkin_ws/devel/setup.bash
