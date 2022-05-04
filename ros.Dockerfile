@@ -6,17 +6,21 @@ RUN apt-get update && apt-get install build-essential freeglut3-dev git libxi-de
 WORKDIR /opt/dependencies
 
 RUN wget https://sourceforge.net/projects/dependencies/files/opensim-core/opensim-core-4.1-ubuntu-18.04.tar.xz && \
-        tar -xvf opensim-core-4.1-ubuntu-18.04.tar.xz 
+        tar -xvf opensim-core-4.1-ubuntu-18.04.tar.xz && rm opensim-core-4.1-ubuntu-18.04.tar.xz 
 
 RUN  wget https://sourceforge.net/projects/dependencies/files/oscpack/oscpack-ubuntu-18.04.tar.xz && \
-        tar -xvf oscpack-ubuntu-18.04.tar.xz  
+        tar -xvf oscpack-ubuntu-18.04.tar.xz && rm oscpack-ubuntu-18.04.tar.xz 
 
 RUN  wget https://sourceforge.net/projects/dependencies/files/vicon/ViconDataStreamSDK_1.7.1_96542h.tar.xz && \
-        tar -xvf ViconDataStreamSDK_1.7.1_96542h.tar.xz
+        tar -xvf ViconDataStreamSDK_1.7.1_96542h.tar.xz && rm ViconDataStreamSDK_1.7.1_96542h.tar.xz
+
+RUN echo "I use this to make it get stuff from git again"
+
+RUN git clone https://github.com/mysablehats/OpenSimRT_data.git /srv/data
 
 WORKDIR /catkin_opensim/src
 
-RUN git clone https://github.com/frederico-klein/OpenSimRT.git ./opensimrt -b permissions 
+RUN echo "" && git clone https://github.com/frederico-klein/OpenSimRT.git ./opensimrt -b slim --single-branch && ln -s /srv/data opensimrt/data  
 RUN sed 's@~@/opt@' ./opensimrt/.github/workflows/env_variables >> ./opensimrt/env.sh
 
 ENV PYTHONPATH=/opt/ros/noetic/lib/python3/dist-packages/:$PYTHONPATH
@@ -36,16 +40,18 @@ WORKDIR /opensimrt
 
 RUN git clone https://github.com/frederico-klein/imu_driver.git 
 
-ADD entrypoint.sh /bin/entrypoint.sh 
+ADD scripts/entrypoint.sh /bin/entrypoint.sh 
 
-WORKDIR /catkin_opensim/src/opensimrt
+#WORKDIR /catkin_opensim/src/opensimrt
 
 #RUN git pull && git checkout permissions 
 
 WORKDIR /catkin_opensim
 
-ADD build.bash /catkin_opensim
+ADD scripts/build_opensimrt.bash /catkin_opensim/build.bash
 RUN bash ./build.bash
+
+ADD scripts/build_catkin_ws.bash /build.bash
 
 
 ENTRYPOINT [ "entrypoint.sh" ]

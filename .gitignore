@@ -1,5 +1,5 @@
 __pycache__
-ros/src/*
-ros/devel/*
-ros/build/*
+catkin_ws/src/*
+catkin_ws/devel/*
+catkin_ws/build/*
 opensimrt/*
