@@ -1,6 +1,6 @@
 BRANCH=$(git branch --show-current )
-mkdir -p ros/devel
-mkdir -p ros/build
+mkdir -p catkin_ws/devel
+mkdir -p catkin_ws/build
 
 if [ "$(uname)" == "Darwin" ]; then
     # Do something under Mac OS X platform        
