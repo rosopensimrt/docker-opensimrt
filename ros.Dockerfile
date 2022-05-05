@@ -20,6 +20,8 @@ RUN git clone https://github.com/mysablehats/OpenSimRT_data.git /srv/data
 
 WORKDIR /catkin_opensim/src
 
+#RUN echo "I use this to make it get stuff from git again"
+
 RUN git clone https://github.com/frederico-klein/OpenSimRT.git ./opensimrt -b slim --single-branch && ln -s /srv/data opensimrt/data  
 RUN sed 's@~@/opt@' ./opensimrt/.github/workflows/env_variables >> ./opensimrt/env.sh
 
