@@ -44,8 +44,6 @@ WORKDIR /opensimrt
 
 RUN git clone https://github.com/frederico-klein/imu_driver.git 
 
-ADD scripts/entrypoint.sh /bin/entrypoint.sh 
-
 #WORKDIR /catkin_opensim/src/opensimrt
 
 #RUN git pull && git checkout permissions 
@@ -55,7 +53,12 @@ WORKDIR /catkin_opensim
 ADD scripts/build_opensimrt.bash /catkin_opensim/build.bash
 RUN bash ./build.bash
 
-ADD scripts/build_catkin_ws.bash /build.bash
+WORKDIR /
 
+ADD scripts/build_catkin_ws.bash /build_ws.bash
+#this is a volume now so we can't build it at docker build time
+#RUN bash build_ws.bash
+
+ADD scripts/entrypoint.sh /bin/entrypoint.sh 
 
 ENTRYPOINT [ "entrypoint.sh" ]
