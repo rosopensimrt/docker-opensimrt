@@ -23,7 +23,7 @@ WORKDIR /catkin_opensim/src
 #RUN echo "I use this to make it get stuff from git again"
 
 #RUN git clone https://github.com/frederico-klein/OpenSimRT.git ./opensimrt -b slim --single-branch && ln -s /srv/data opensimrt/data  
-RUN git clone https://github.com/frederico-klein/OpenSimRT.git ./opensimrt -b v0.03ros --depth 1 && ln -s /srv/data opensimrt/data  
+RUN git clone https://github.com/frederico-klein/OpenSimRT.git ./opensimrt -b v0.03.1ros --depth 1 && ln -s /srv/data opensimrt/data  
 RUN sed 's@~@/opt@' ./opensimrt/.github/workflows/env_variables >> ./opensimrt/env.sh
 
 RUN git clone https://github.com/mysablehats/opensimrt_msgs.git -b v0.03ros
@@ -41,9 +41,9 @@ RUN echo "git pull && git checkout permissions && cd /opensimrt/build && bash bu
 	
 EXPOSE 8080/udp
 
-WORKDIR /opensimrt
+#WORKDIR /opensimrt
 
-RUN git clone https://github.com/frederico-klein/imu_driver.git -b v0.03ros
+#RUN git clone https://github.com/frederico-klein/imu_driver.git -b v0.03ros
 
 #WORKDIR /catkin_opensim/src/opensimrt
 
@@ -52,7 +52,7 @@ RUN git clone https://github.com/frederico-klein/imu_driver.git -b v0.03ros
 WORKDIR /catkin_opensim
 
 ADD scripts/build_opensimrt.bash /bin/catkin_build_opensimrt.bash
-RUN build_opensimrt.bash
+RUN catkin_build_opensimrt.bash
 
 WORKDIR /
 
