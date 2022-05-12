@@ -51,12 +51,12 @@ RUN git clone https://github.com/frederico-klein/imu_driver.git -b v0.03ros
 
 WORKDIR /catkin_opensim
 
-ADD scripts/build_opensimrt.bash /bin/build_opensimrt.bash
+ADD scripts/build_opensimrt.bash /bin/catkin_build_opensimrt.bash
 RUN build_opensimrt.bash
 
 WORKDIR /
 
-ADD scripts/build_catkin_ws.bash /bin/build_ws.bash
+ADD scripts/build_catkin_ws.bash /bin/catkin_build_ws.bash
 #this is a volume now so we can't build it at docker build time
 #RUN bash build_ws.bash
 

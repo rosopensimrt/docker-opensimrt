@@ -6,7 +6,7 @@ roscore &
 #cd build
 # if we dont wait, ros often tries to spawn another server and things dont work out
 sleep 2 
-build_ws.bash
+catkin_build_ws.bash
 if [[ -f "/catkin_ws/devel/setup.bashh" ]]; then
  pushd /catkin_ws 
  #rviz -d ./_default.rviz &
