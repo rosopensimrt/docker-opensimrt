@@ -22,10 +22,11 @@ WORKDIR /catkin_opensim/src
 
 #RUN echo "I use this to make it get stuff from git again"
 
-RUN git clone https://github.com/frederico-klein/OpenSimRT.git ./opensimrt -b slim --single-branch && ln -s /srv/data opensimrt/data  
+#RUN git clone https://github.com/frederico-klein/OpenSimRT.git ./opensimrt -b slim --single-branch && ln -s /srv/data opensimrt/data  
+RUN git clone https://github.com/frederico-klein/OpenSimRT.git ./opensimrt -b v0.03ros --depth 1 && ln -s /srv/data opensimrt/data  
 RUN sed 's@~@/opt@' ./opensimrt/.github/workflows/env_variables >> ./opensimrt/env.sh
 
-RUN git clone https://github.com/mysablehats/opensimrt_msgs.git
+RUN git clone https://github.com/mysablehats/opensimrt_msgs.git -b v0.03ros
 
 ENV PYTHONPATH=/opt/ros/noetic/lib/python3/dist-packages/:$PYTHONPATH
 
@@ -42,7 +43,7 @@ EXPOSE 8080/udp
 
 WORKDIR /opensimrt
 
-RUN git clone https://github.com/frederico-klein/imu_driver.git 
+RUN git clone https://github.com/frederico-klein/imu_driver.git -b v0.03ros
 
 #WORKDIR /catkin_opensim/src/opensimrt
 
@@ -50,12 +51,12 @@ RUN git clone https://github.com/frederico-klein/imu_driver.git
 
 WORKDIR /catkin_opensim
 
-ADD scripts/build_opensimrt.bash /catkin_opensim/build.bash
-RUN bash ./build.bash
+ADD scripts/build_opensimrt.bash /bin/build_opensimrt.bash
+RUN build_opensimrt.bash
 
 WORKDIR /
 
-ADD scripts/build_catkin_ws.bash /build_ws.bash
+ADD scripts/build_catkin_ws.bash /bin/build_ws.bash
 #this is a volume now so we can't build it at docker build time
 #RUN bash build_ws.bash
 

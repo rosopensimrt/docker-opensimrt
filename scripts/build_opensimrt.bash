@@ -1,3 +1,6 @@
+#!/usr/bin/env bash
+set -e
+cd /catkin_opensim
 source src/opensimrt/env.sh 
 . /opt/ros/noetic/setup.sh
 catkin_make  \
