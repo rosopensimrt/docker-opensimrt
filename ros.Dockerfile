@@ -61,5 +61,7 @@ ADD scripts/build_catkin_ws.bash /bin/catkin_build_ws.bash
 #RUN bash build_ws.bash
 
 ADD scripts/entrypoint.sh /bin/entrypoint.sh 
+RUN wget https://bootstrap.pypa.io/get-pip.py && python3 get-pip.py && python3 -m pip install --user --upgrade pynvim
+ADD .vimrc /root
 
 ENTRYPOINT [ "entrypoint.sh" ]

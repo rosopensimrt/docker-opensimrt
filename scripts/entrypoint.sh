@@ -17,6 +17,9 @@ if [[ -f "/catkin_ws/devel/setup.bashh" ]]; then
  popd 
 fi
 
+## nvim
+export PATH=/nvim:$PATH
+python3 /root/.vim/plugged/YouCompleteMe/install.py --clangd-completer
 
 ## Running passed command
 if [[ "$1" ]]; then
