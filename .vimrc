@@ -1,5 +1,5 @@
 
-
+set mouse=n
 syntax on
 
 let g:tex_flavor='latex'
