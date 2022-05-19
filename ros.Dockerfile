@@ -22,8 +22,8 @@ WORKDIR /catkin_opensim/src
 
 #RUN echo "I use this to make it get stuff from git again"
 
-#RUN git clone https://github.com/frederico-klein/OpenSimRT.git ./opensimrt -b slim --single-branch && ln -s /srv/data opensimrt/data  
-RUN git clone https://github.com/frederico-klein/OpenSimRT.git ./opensimrt -b v0.03.1ros --depth 1 && ln -s /srv/data opensimrt/data  
+RUN git clone https://github.com/frederico-klein/OpenSimRT.git ./opensimrt -b slim --single-branch && ln -s /srv/data opensimrt/data  
+#RUN git clone https://github.com/frederico-klein/OpenSimRT.git ./opensimrt -b v0.03.1ros --depth 1 && ln -s /srv/data opensimrt/data  
 RUN sed 's@~@/opt@' ./opensimrt/.github/workflows/env_variables >> ./opensimrt/env.sh
 
 RUN git clone https://github.com/mysablehats/opensimrt_msgs.git -b v0.03ros
