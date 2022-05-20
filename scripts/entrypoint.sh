@@ -18,6 +18,7 @@ if [[ -f "/catkin_ws/devel/setup.bashh" ]]; then
 fi
 
 ## nvim
+export OPENSIMRTDIR=opensimrt_core
 export PATH=/nvim:$PATH
 python3 /root/.vim/plugged/YouCompleteMe/install.py --clangd-completer
 
