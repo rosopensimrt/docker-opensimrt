@@ -23,11 +23,11 @@ WORKDIR /catkin_opensim/src
 ENV OPENSIMRTDIR=opensimrt_core
 #RUN echo "I use this to make it get stuff from git again"
 
-RUN git clone https://github.com/frederico-klein/OpenSimRT.git ./$OPENSIMRTDIR -b slim-linted --single-branch && ln -s /srv/data $OPENSIMRTDIR/data  
+RUN git clone https://github.com/frederico-klein/OpenSimRT.git ./$OPENSIMRTDIR -b slim-death  && ln -s /srv/data $OPENSIMRTDIR/data  
 #RUN git clone https://github.com/frederico-klein/OpenSimRT.git ./opensimrt -b v0.03.1ros --depth 1 && ln -s /srv/data opensimrt/data  
 RUN sed 's@~@/opt@' ./$OPENSIMRTDIR/.github/workflows/env_variables >> ./$OPENSIMRTDIR/env.sh
 
-RUN git clone https://github.com/mysablehats/opensimrt_msgs.git -b v0.03ros
+RUN git clone https://github.com/mysablehats/opensimrt_msgs.git -b main
 
 RUN git clone https://github.com/mysablehats/opensimrt_bridge.git -b devel
 
@@ -40,10 +40,9 @@ ENV PYTHONPATH=/opt/ros/noetic/lib/python3/dist-packages/:$PYTHONPATH
 ENV LD_LIBRARY_PATH=/opt/dependencies/opensim-core/lib/
 #:/opensimrt/build/
 
-RUN echo "git pull && git checkout permissions && cd /opensimrt/build && bash build.bash" >> ~/.bash_history
+#RUN echo "git pull && git checkout permissions && cd /opensimrt/build && bash build.bash" >> ~/.bash_history
+RUN echo "export PATH=/nvim/:$PATH" >> ~/.bash_history
 	
-EXPOSE 8080/udp
-
 #WORKDIR /opensimrt
 
 #RUN git clone https://github.com/frederico-klein/imu_driver.git -b v0.03ros
@@ -60,11 +59,26 @@ RUN catkin_build_opensimrt.bash
 WORKDIR /
 
 ADD scripts/build_catkin_ws.bash /bin/catkin_build_ws.bash
+ADD scripts/ximu.bash /bin
+RUN /bin/ximu.bash
 #this is a volume now so we can't build it at docker build time
 #RUN bash build_ws.bash
 
 ADD scripts/entrypoint.sh /bin/entrypoint.sh 
 RUN wget https://bootstrap.pypa.io/get-pip.py && python3 get-pip.py && python3 -m pip install --user --upgrade pynvim
 ADD .vimrc /root
+
+RUN echo "source /catkin_opensim/devel/setup.bash" >> ~/.bashrc
+
+EXPOSE 8080/udp
+
+EXPOSE 9000/udp
+EXPOSE 9001/udp
+EXPOSE 10000/udp
+
+EXPOSE 8001/udp
+EXPOSE 8000/udp
+
+expose 7000/tcp
 
 ENTRYPOINT [ "entrypoint.sh" ]
