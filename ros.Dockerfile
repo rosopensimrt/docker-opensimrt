@@ -2,7 +2,7 @@ FROM ros:noetic-ros-base
 
 ENV DEBIAN_FRONTEND=noninteractive
 
-RUN apt-get update && apt-get install build-essential freeglut3-dev git libxi-dev libxmu-dev liblapack-dev doxygen cmake wget xz-utils vim python ros-noetic-desktop-full v4l-utils catkin-lint --yes && rm -rf /var/lib/apt/lists/*
+RUN apt-get update && apt-get install build-essential freeglut3-dev git libxi-dev libxmu-dev liblapack-dev doxygen cmake wget xz-utils vim python ros-noetic-desktop-full v4l-utils catkin-lint tmux --yes && rm -rf /var/lib/apt/lists/*
 WORKDIR /opt/dependencies
 
 RUN wget https://sourceforge.net/projects/dependencies/files/opensim-core/opensim-core-4.1-ubuntu-18.04.tar.xz && \
@@ -14,7 +14,7 @@ RUN  wget https://sourceforge.net/projects/dependencies/files/oscpack/oscpack-ub
 RUN  wget https://sourceforge.net/projects/dependencies/files/vicon/ViconDataStreamSDK_1.7.1_96542h.tar.xz && \
         tar -xvf ViconDataStreamSDK_1.7.1_96542h.tar.xz && rm ViconDataStreamSDK_1.7.1_96542h.tar.xz
 
-RUN echo "I use this to make it get stuff from git again"
+#RUN echo "I use this to make it get stuff from git again"
 
 RUN git clone https://github.com/mysablehats/OpenSimRT_data.git /srv/data
 
@@ -41,7 +41,7 @@ ENV LD_LIBRARY_PATH=/opt/dependencies/opensim-core/lib/
 #:/opensimrt/build/
 
 #RUN echo "git pull && git checkout permissions && cd /opensimrt/build && bash build.bash" >> ~/.bash_history
-RUN echo "export PATH=/nvim/:$PATH" >> ~/.bash_history
+RUN printf 'export PATH=/nvim/:/root/tmux:$PATH\n' >> ~/.bashrc
 	
 #WORKDIR /opensimrt
 
@@ -68,7 +68,7 @@ ADD scripts/entrypoint.sh /bin/entrypoint.sh
 RUN wget https://bootstrap.pypa.io/get-pip.py && python3 get-pip.py && python3 -m pip install --user --upgrade pynvim
 ADD .vimrc /root
 
-RUN echo "source /catkin_opensim/devel/setup.bash" >> ~/.bashrc
+RUN echo "source /catkin_opensim/devel/setup.bash" >> ~/.bash_history
 
 EXPOSE 8080/udp
 
@@ -81,4 +81,6 @@ EXPOSE 8000/udp
 
 expose 7000/tcp
 
+ADD tmux/.tmux.conf /root/
+ADD tmux/ /root/tmux
 ENTRYPOINT [ "entrypoint.sh" ]
