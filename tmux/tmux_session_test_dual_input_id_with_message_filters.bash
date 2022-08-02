@@ -27,7 +27,7 @@ tmux send -t mysession:1.1 "roslaunch opensimrt_bridge ik_acceleration_predictio
 tmux send -t mysession:1.2 "rostopic echo /inverse_kinematics_from_file/r_data" C-m
 tmux send -t mysession:1.3 "rostopic echo /inverse_kinematics_from_file/r_data2" C-m
 tmux send -t mysession:1.4 "rosservice call /inverse_kinematics_from_file/start" C-m
-tmux send -t mysession:1.5 "roslaunch opensimrt	id.launch" C-m
+tmux send -t mysession:1.5 "roslaunch opensimrt id.launch" C-m
 
 #tmux send -t mysession:1.6 "ls -la" C-m
 #tmux send -t mysession:1.7 "ls -la" C-m
