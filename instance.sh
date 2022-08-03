@@ -1,1 +1,1 @@
-docker exec -it opensimrt_ros bash 
+docker exec -it opensimrt_ros_ bash 

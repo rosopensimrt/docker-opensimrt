@@ -36,16 +36,19 @@ ADD tmux/ /usr/local/bin
 
 ADD scripts/entrypoint.sh /bin/entrypoint.sh 
 
+RUN echo "I use this to make it get stuff from git again"
+
 # Set user and group
-ARG user=osruser
-ARG group=osruser
+ARG user=osruser1
+ARG group=osruser1
 ARG uid=1000
 ARG gid=1000
+#ARG VIDEOGROUP=${VIDEOGROUP}
+#RUN groupadd -g $VIDEOGROUP video
 RUN groupadd -g ${gid} ${group}
-RUN useradd -u ${uid} -g ${group} -s /bin/sh -m ${user}
-
+RUN useradd -u ${uid} -g root -G sudo,video,${gid} -s /bin/sh -m ${user}
 # Switch to user
-USER ${uid}:${gid}
+USER ${uid}
 
 WORKDIR /catkin_opensim/src
 
@@ -87,7 +90,7 @@ ADD tmux/.tmux.conf /home/${user}/
 
 RUN echo "source /catkin_opensim/devel/setup.bash" >> ~/.bash_history
 
-#RUN /bin/catkin_build_opensimrt.bash
+RUN /bin/catkin_build_opensimrt.bash
 
 EXPOSE 8080/udp
 
