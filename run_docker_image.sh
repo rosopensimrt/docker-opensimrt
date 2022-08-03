@@ -1,10 +1,7 @@
 BRANCH=$(git branch --show-current )
 mkdir -p catkin_ws/devel
 mkdir -p catkin_ws/build
-NAME=opensimrt_ros
-NVIMBINDIR=/home/frekle/.local/bin/
-NVIMDIR=/home/frekle/.vim/
-NVIMCONFIGDIR=/home/frekle/.config/nvim
+NAME=opensimrt_ros_
 
 if [ "$(uname)" == "Darwin" ]; then
     # Do something under Mac OS X platform        
@@ -25,9 +22,6 @@ elif [ "$(expr substr $(uname -s) 1 5)" == "Linux" ]; then
 		--device=/dev/dri:/dev/dri \
 		--device=/dev/video0:/dev/video0 \
 		-v $(pwd)/catkin_ws:/catkin_ws \
-		-v $NVIMDIR:/root/.vim \
-		-v $NVIMBINDIR:/nvim \
-		-v $NVIMCONFIGDIR:/root/.config/nvim \
 		mysablehats/opensim-rt:$BRANCH /bin/bash
 elif [ "$(expr substr $(uname -s) 1 10)" == "MINGW32_NT" ]; then
     # Do something under 32 bits Windows NT platform

@@ -18,10 +18,38 @@ RUN  wget https://sourceforge.net/projects/dependencies/files/vicon/ViconDataStr
 
 RUN git clone https://github.com/mysablehats/OpenSimRT_data.git /srv/data
 
+ADD scripts/build_opensimrt.bash /bin/catkin_build_opensimrt.bash
+#RUN catkin_build_opensimrt.bash
+
+ADD scripts/build_catkin_ws.bash /bin/catkin_build_ws.bash
+ADD scripts/ximu.bash /bin
+RUN /bin/ximu.bash
+#this is a volume now so we can't build it at docker build time
+#RUN bash catkin_build_ws.bash
+
+ADD scripts/entrypoint.sh /bin/entrypoint.sh 
+RUN wget https://bootstrap.pypa.io/get-pip.py && python3 get-pip.py && python3 -m pip install --upgrade pynvim
+ADD vim /nvim
+ADD scripts/vim_install.bash /nvim
+RUN /nvim/vim_install.bash
+ADD tmux/.tmux.conf /etc/tmux
+ADD tmux/ /usr/local/bin
+
+# Set user and group
+ARG user=osruser
+ARG group=osruser
+ARG uid=1000
+ARG gid=1000
+RUN groupadd -g ${gid} ${group}
+RUN useradd -u ${uid} -g ${group} -s /bin/sh -m ${user}
+
+# Switch to user
+USER ${uid}:${gid}
+
 WORKDIR /catkin_opensim/src
 
 ENV OPENSIMRTDIR=opensimrt_core
-#RUN echo "I use this to make it get stuff from git again"
+RUN echo "I use this to make it get stuff from git again"
 
 RUN git clone https://github.com/frederico-klein/OpenSimRT.git ./$OPENSIMRTDIR -b slim-death  && ln -s /srv/data $OPENSIMRTDIR/data  
 #RUN git clone https://github.com/frederico-klein/OpenSimRT.git ./opensimrt -b v0.03.1ros --depth 1 && ln -s /srv/data opensimrt/data  
@@ -41,7 +69,7 @@ ENV LD_LIBRARY_PATH=/opt/dependencies/opensim-core/lib/
 #:/opensimrt/build/
 
 #RUN echo "git pull && git checkout permissions && cd /opensimrt/build && bash build.bash" >> ~/.bash_history
-RUN printf 'export PATH=/nvim/:/root/tmux:$PATH\n' >> ~/.bashrc
+#RUN printf 'export PATH=/nvim/:/root/tmux:$PATH\n' >> ~/.bashrc
 	
 #WORKDIR /opensimrt
 
@@ -51,24 +79,14 @@ RUN printf 'export PATH=/nvim/:/root/tmux:$PATH\n' >> ~/.bashrc
 
 #RUN git pull && git checkout permissions 
 
-WORKDIR /catkin_opensim
+ADD scripts/vim_configure.bash /home/${user}/
+RUN ~/vim_configure.bash
 
-ADD scripts/build_opensimrt.bash /bin/catkin_build_opensimrt.bash
-RUN catkin_build_opensimrt.bash
-
-WORKDIR /
-
-ADD scripts/build_catkin_ws.bash /bin/catkin_build_ws.bash
-ADD scripts/ximu.bash /bin
-RUN /bin/ximu.bash
-#this is a volume now so we can't build it at docker build time
-#RUN bash build_ws.bash
-
-ADD scripts/entrypoint.sh /bin/entrypoint.sh 
-RUN wget https://bootstrap.pypa.io/get-pip.py && python3 get-pip.py && python3 -m pip install --user --upgrade pynvim
-ADD .vimrc /root
+ADD tmux/.tmux.conf /home/${user}/
 
 RUN echo "source /catkin_opensim/devel/setup.bash" >> ~/.bash_history
+
+#RUN /bin/catkin_build_opensimrt.bash
 
 EXPOSE 8080/udp
 
@@ -81,6 +99,4 @@ EXPOSE 8000/udp
 
 expose 7000/tcp
 
-ADD tmux/.tmux.conf /root/
-ADD tmux/ /root/tmux
 ENTRYPOINT [ "entrypoint.sh" ]

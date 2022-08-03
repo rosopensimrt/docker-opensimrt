@@ -1,5 +1,5 @@
-
 set mouse=n
+
 syntax on
 
 let g:tex_flavor='latex'
@@ -32,6 +32,7 @@ set guifont=DroidSansMono\ Nerd\ Font\ 11
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
 Plug 'tiagofumo/vim-nerdtree-syntax-highlight'
+Plug 'christoomey/vim-tmux-navigator'
 
 " loading the plugin
 let g:webdevicons_enable = 1
@@ -89,3 +90,5 @@ filetype plugin indent on
 
 let g:vimtex_view_general_viewer = 'okular'
 let g:vimtex_view_general_options = '--unique file:@pdf\#src:@line@tex'
+set list
+set listchars=eol:⏎,tab:␉·,trail:␠,nbsp:⎵
