@@ -2,7 +2,7 @@
 set -e
 
 source /opt/ros/$ROS_DISTRO/setup.bash
-catkin_build_ws.bash
+#catkin_build_ws.bash
 
 export OPENSIMRTDIR=opensimrt_core
 

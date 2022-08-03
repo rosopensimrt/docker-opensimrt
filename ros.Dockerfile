@@ -27,13 +27,14 @@ RUN /bin/ximu.bash
 #this is a volume now so we can't build it at docker build time
 #RUN bash catkin_build_ws.bash
 
-ADD scripts/entrypoint.sh /bin/entrypoint.sh 
 RUN wget https://bootstrap.pypa.io/get-pip.py && python3 get-pip.py && python3 -m pip install --upgrade pynvim
 ADD vim /nvim
 ADD scripts/vim_install.bash /nvim
 RUN /nvim/vim_install.bash
 ADD tmux/.tmux.conf /etc/tmux
 ADD tmux/ /usr/local/bin
+
+ADD scripts/entrypoint.sh /bin/entrypoint.sh 
 
 # Set user and group
 ARG user=osruser
@@ -98,5 +99,11 @@ EXPOSE 8001/udp
 EXPOSE 8000/udp
 
 expose 7000/tcp
+
+##BLING
+ADD scripts/bash_git.bash /home/${user}/.bash_git
+ADD scripts/bashbar.bash  /home/${user}/.bash_bar
+RUN echo "source ~/.bash_git" >> ~/.bashrc && \
+    echo "source ~/.bash_bar" >> ~/.bashrc
 
 ENTRYPOINT [ "entrypoint.sh" ]
