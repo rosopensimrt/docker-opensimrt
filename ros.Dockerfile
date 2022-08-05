@@ -28,7 +28,6 @@ ADD vim /nvim
 ADD scripts/vim_install.bash /nvim
 RUN /nvim/vim_install.bash
 ADD tmux/.tmux.conf /etc/tmux
-ADD tmux/ /usr/local/bin
 
 ADD scripts/entrypoint.sh /bin/entrypoint.sh 
 
@@ -111,5 +110,6 @@ RUN echo "source ~/.bash_git" >> ~/.bashrc && \
 
 ADD scripts/create_bashrcs.bash /home/${user}/.create_bashrcs.sh
 RUN bash ~/.create_bashrcs.sh
+ADD tmux/ /usr/local/bin
 
 ENTRYPOINT [ "entrypoint.sh" ]
