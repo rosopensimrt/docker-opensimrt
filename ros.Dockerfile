@@ -49,7 +49,7 @@ USER ${uid}
 WORKDIR /catkin_opensim/src
 
 ENV OPENSIMRTDIR=opensimrt_core
-RUN echo "I use this to make it get stuff from git again"
+#RUN echo "I use this to make it get stuff from git again"
 
 RUN git clone https://github.com/frederico-klein/OpenSimRT.git ./$OPENSIMRTDIR -b slim-death  && ln -s /srv/data $OPENSIMRTDIR/data  
 #RUN git clone https://github.com/frederico-klein/OpenSimRT.git ./opensimrt -b v0.03.1ros --depth 1 && ln -s /srv/data opensimrt/data  
