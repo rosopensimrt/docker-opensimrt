@@ -1,8 +1,7 @@
 #!/usr/bin/env bash
 
-source /catkin_opensim/devel/setup.bash
-
-tmux new-session -s mysession -d bash
+tmux new-session -s mysession -d 
+tmux set-option -s -t mysession default-command "bash --rcfile ~/.bashrc_opensim.sh"
 tmux send -t mysession:0.0 "roscore" C-m
 sleep 2
 
@@ -10,18 +9,18 @@ tmux new-window
 tmux new-window
 tmux new-window
 tmux select-window -t 1
-tmux split-window -h bash
-tmux split-window -h bash
-tmux split-window -h bash
+tmux split-window -h 
+tmux split-window -h 
+tmux split-window -h 
 tmux select-layout even-horizontal
 tmux select-pane -t 3
-tmux split-window -v -p 50 bash
+tmux split-window -v -p 50 
 tmux select-pane -t 2
-tmux split-window -v -p 50 bash
+tmux split-window -v -p 50 
 tmux select-pane -t 1 
-tmux split-window -v -p 50 bash
+tmux split-window -v -p 50 
 tmux select-pane -t 0
-tmux split-window -v -p 50 bash
+tmux split-window -v -p 50 
 #tmux select-layout tiled
 #tmux select-pane -t 0
 

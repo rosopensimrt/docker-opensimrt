@@ -1,15 +1,14 @@
 #!/usr/bin/env bash
 
-source /catkin_opensim/devel/setup.bash
-
-tmux new-session -s mysession -d bash
+tmux new-session -s mysession -d 
+tmux set-option -s -t mysession default-command "bash --rcfile ~/.bashrc_opensim.sh"
 tmux send -t mysession:0.0 "roscore" C-m
 sleep 2
 
 tmux new-window
 tmux select-window -t 1
-tmux split-window -h bash
-tmux split-window -h bash
+tmux split-window -h 
+tmux split-window -h 
 tmux select-layout even-horizontal
 
 tmux send -t mysession:1.0 "rosrun opensimrt OnlineUpperLimbUIMUIKar" C-m

@@ -18,10 +18,6 @@ RUN  wget https://sourceforge.net/projects/dependencies/files/vicon/ViconDataStr
 
 RUN git clone https://github.com/mysablehats/OpenSimRT_data.git /srv/data
 
-ADD scripts/build_opensimrt.bash /bin/catkin_build_opensimrt.bash
-#RUN catkin_build_opensimrt.bash
-
-ADD scripts/build_catkin_ws.bash /bin/catkin_build_ws.bash
 ADD scripts/ximu.bash /bin
 RUN /bin/ximu.bash
 #this is a volume now so we can't build it at docker build time
@@ -88,6 +84,10 @@ RUN ~/vim_configure.bash
 
 ADD tmux/.tmux.conf /home/${user}/
 
+ADD scripts/build_opensimrt.bash /bin/catkin_build_opensimrt.bash
+
+ADD scripts/build_catkin_ws.bash /bin/catkin_build_ws.bash
+
 RUN echo "source /catkin_opensim/devel/setup.bash" >> ~/.bash_history
 
 RUN /bin/catkin_build_opensimrt.bash
@@ -108,5 +108,8 @@ ADD scripts/bash_git.bash /home/${user}/.bash_git
 ADD scripts/bashbar.bash  /home/${user}/.bash_bar
 RUN echo "source ~/.bash_git" >> ~/.bashrc && \
     echo "source ~/.bash_bar" >> ~/.bashrc
+
+ADD scripts/create_bashrcs.bash /home/${user}/.create_bashrcs.sh
+RUN bash ~/.create_bashrcs.sh
 
 ENTRYPOINT [ "entrypoint.sh" ]

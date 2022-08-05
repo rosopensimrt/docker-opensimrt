@@ -27,7 +27,10 @@ export GIT_PS1_SHOWDIRTYSTATE=1
 export GIT_PS1_SHOWCOLORHINTS=1
 
 export PS1=\
-"\n\[${BG_GRAY}\] \[${FG_BLUE}\] DOCKER  \[${FG_RED}\] [] \[${FG_BLACK}\]\u@\h \[${FG_GRAY}${BG_SLATE}\] "\
-"\[${FG_BLACK}\]\w \[${FMT_RESET}${FG_SLATE}\]"\
+"\n\[${BG_GRAY}\] \[${FG_BLUE}\] DOCKER  \[${FG_RED}\] [] \[${FG_BLACK}\]\u@\h \[${FG_GRAY}${BG_BLUE}\] "\
+"\[${FG_BLACK}\]\w \[${FMT_RESET}${FG_BLUE}\]"\
 '$(__git_ps1 "\[${BG_MAGENTA}\] \[${FG_WHITE}\] %s \[${FMT_RESET}${FG_MAGENTA}\]")'\
 "\n \[${FG_GREEN}\]╰ \[${FG_CYAN}\]\$ \[${FMT_RESET}\]"
+
+
+ 
