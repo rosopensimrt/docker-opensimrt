@@ -2,7 +2,7 @@ FROM ros:noetic-ros-base
 
 ENV DEBIAN_FRONTEND=noninteractive
 
-RUN apt-get update && apt-get install build-essential freeglut3-dev git libxi-dev libxmu-dev liblapack-dev doxygen cmake wget xz-utils vim python ros-noetic-desktop-full v4l-utils catkin-lint tmux --yes && rm -rf /var/lib/apt/lists/*
+RUN apt-get update && apt-get install build-essential freeglut3-dev git libxi-dev libxmu-dev liblapack-dev doxygen gdb cmake wget xz-utils vim python ros-noetic-desktop-full v4l-utils catkin-lint tmux --yes && rm -rf /var/lib/apt/lists/*
 WORKDIR /opt/dependencies
 
 RUN wget https://sourceforge.net/projects/dependencies/files/opensim-core/opensim-core-4.1-ubuntu-18.04.tar.xz && \
@@ -29,7 +29,6 @@ ADD scripts/vim_install.bash /nvim
 RUN /nvim/vim_install.bash
 ADD tmux/.tmux.conf /etc/tmux
 
-ADD scripts/entrypoint.sh /bin/entrypoint.sh 
 
 RUN echo "I use this to make it get stuff from git again"
 
@@ -41,16 +40,16 @@ ARG gid=1000
 #ARG VIDEOGROUP=${VIDEOGROUP}
 #RUN groupadd -g $VIDEOGROUP video
 RUN groupadd -g ${gid} ${group}
-RUN useradd -u ${uid} -g root -G sudo,video,${gid} -s /bin/sh -m ${user}
+RUN useradd -u ${uid} -g root -G sudo,video,${gid} -s /bin/sh -m ${user} -p123456
 # Switch to user
 USER ${uid}
 
 WORKDIR /catkin_opensim/src
 
 ENV OPENSIMRTDIR=opensimrt_core
-#RUN echo "I use this to make it get stuff from git again"
+RUN echo "I use this to make it get stuff from git again"
 
-RUN git clone https://github.com/frederico-klein/OpenSimRT.git ./$OPENSIMRTDIR -b slim-death  && ln -s /srv/data $OPENSIMRTDIR/data  
+RUN git clone https://github.com/frederico-klein/OpenSimRT.git ./$OPENSIMRTDIR -b slim-death-noimus  && ln -s /srv/data $OPENSIMRTDIR/data && echo hello 
 #RUN git clone https://github.com/frederico-klein/OpenSimRT.git ./opensimrt -b v0.03.1ros --depth 1 && ln -s /srv/data opensimrt/data  
 RUN sed 's@~@/opt@' ./$OPENSIMRTDIR/.github/workflows/env_variables >> ./$OPENSIMRTDIR/env.sh
 
@@ -77,11 +76,11 @@ ENV LD_LIBRARY_PATH=/opt/dependencies/opensim-core/lib/
 #WORKDIR /catkin_opensim/src/opensimrt
 
 #RUN git pull && git checkout permissions 
-
-ADD scripts/vim_configure.bash /home/${user}/
+ENV HOME_DIR=/home/${user}
+ADD scripts/vim_configure.bash ${HOME_DIR}/
 RUN ~/vim_configure.bash
 
-ADD tmux/.tmux.conf /home/${user}/
+ADD tmux/.tmux.conf ${HOME_DIR}/
 
 ADD scripts/build_opensimrt.bash /bin/catkin_build_opensimrt.bash
 
@@ -103,13 +102,14 @@ EXPOSE 8000/udp
 expose 7000/tcp
 
 ##BLING
-ADD scripts/bash_git.bash /home/${user}/.bash_git
-ADD scripts/bashbar.bash  /home/${user}/.bash_bar
+ADD scripts/bash_git.bash ${HOME_DIR}/.bash_git
+ADD scripts/bashbar.bash  ${HOME_DIR}/.bash_bar
 RUN echo "source ~/.bash_git" >> ~/.bashrc && \
     echo "source ~/.bash_bar" >> ~/.bashrc
 
-ADD scripts/create_bashrcs.bash /home/${user}/.create_bashrcs.sh
+ADD scripts/create_bashrcs.bash ${HOME_DIR}/.create_bashrcs.sh
 RUN bash ~/.create_bashrcs.sh
-ADD tmux/ /usr/local/bin
+#ADD tmux/ /usr/local/bin # moved to a volume
+ADD scripts/entrypoint.sh /bin/entrypoint.sh 
 
 ENTRYPOINT [ "entrypoint.sh" ]

@@ -1,7 +1,7 @@
 BRANCH=$(git branch --show-current )
 mkdir -p catkin_ws/devel
 mkdir -p catkin_ws/build
-NAME=opensimrt_ros_
+NAME=opensimrt_ros_devel
 
 if [ "$(uname)" == "Darwin" ]; then
     # Do something under Mac OS X platform        
@@ -14,9 +14,6 @@ elif [ "$(expr substr $(uname -s) 1 5)" == "Linux" ]; then
     # Do something under GNU/Linux platform
 	xhost +
 	docker run --rm -it \
-		-p 9000:9000/udp \
-		-p 8001:8001/udp \
-		-p 10000:10000/udp \
 		-e DISPLAY=$DISPLAY -v /tmp/.X11-unix:/tmp/.X11-unix \
 		--name=$NAME \
 		--device=/dev/dri:/dev/dri \
