@@ -1,8 +1,6 @@
 # CI "inspired" opensimrt docker
 
-It's just their [CI yaml in docker format. ](https://github.com/mitkof6/OpenSimRT)
-
-
+This package is mostly just their [CI yaml in docker format. ](https://github.com/mitkof6/OpenSimRT)
 You need to have [docker installed](https://docs.docker.com/get-docker/).
 
 Build with :
@@ -12,6 +10,10 @@ Build with :
 Run with:
 
     $ bash run_docker_image.sh
+
+# XIMU port forwarding
+
+To use XIMU3 sensors with WiFi, docker needs to be able to access the appropriate ports. Those need to be setup correctly in the "run\_docker\_image.sh" script and possibly in the ros.Dockerfile.
 
 # Docker builds
 
@@ -35,3 +37,6 @@ This ip will be used to set the DISPLAY variable which will run inside the docke
 
 Or whatever your ip is. 
 
+# Troubleshooting
+
+Showing OpenSim graphics in Linux uses X forwarding with hardware acceleration. This is not available in Windows (as far as I know) and may the reason why running the Docker inside Windows has such slow performance.
