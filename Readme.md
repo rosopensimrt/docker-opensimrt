@@ -37,6 +37,6 @@ This ip will be used to set the DISPLAY variable which will run inside the docke
 
 Or whatever your ip is. 
 
-# Troubleshooting
+## Known issues
 
 Showing OpenSim graphics in Linux uses X forwarding with hardware acceleration. This is not available in Windows (as far as I know) and may the reason why running the Docker inside Windows has such slow performance.
