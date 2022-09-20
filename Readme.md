@@ -50,7 +50,11 @@ The docker with the default version from mitkof6/OpenSIMRT can be obtained with:
 
 It can also be directly accessed [here](https://hub.docker.com/layers/mysablehats/opensim-rt/main/images/sha256-f3f238759e736f2fd01b9a1eec307b9dbe664f97206e438541bb2685b9fcb38e).
 
-# Windows Users:
+# Windows and Mac users
+
+Currently the visualizations (either from rViz or from OpenSim) are using X, so to be able to see visual output you will need an X server. Docker networking with ROS can be tricky and we provide no support for those cases. If you know what you are doing, you can forward the topics to another Linux PC with ROS natively installed or even do your own visualization using the ROS implementation under the hood (say with an additional node serving as a tunnel). 
+
+## Windows Users:
 
 To show graphics make sure you have either Xming or vcxsrv installed and running. 
 
@@ -61,6 +65,10 @@ This ip will be used to set the DISPLAY variable which will run inside the docke
     $ export DISPLAY=172.23.64.1:0.0
 
 Or whatever your ip is. 
+
+## Mac
+
+The X server for MacOS is XQuartz. It may have the same limitations as Windows visualization, but this has not been tested.
 
 ## Known issues
 
