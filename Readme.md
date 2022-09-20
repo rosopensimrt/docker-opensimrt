@@ -1,6 +1,6 @@
 # docker opensimrt
 
-This repository contains scripts for building and launching OpenSimRT with a ROS interface. It was based on the [CI yaml from OpenSimRT. ](https://github.com/mitkof6/OpenSimRT). It was meant to be used on Linux, however it may be possible to use other Docker for Windows or Mac, however those cases have not been thoroughly tested.
+This repository contains scripts for building and launching OpenSimRT with a ROS interface. It was based on the [CI yaml from OpenSimRT](https://github.com/mitkof6/OpenSimRT). It was meant to be used on Linux, however it may be possible to use other Docker for Windows or Mac, however those cases have not been thoroughly tested.
 
 To use it you need to have [docker installed](https://docs.docker.com/get-docker/).
 
@@ -66,10 +66,11 @@ This ip will be used to set the DISPLAY variable which will run inside the docke
 
 Or whatever your ip is. 
 
-## Mac
+### Known issues
+
+Showing OpenSim graphics in Linux uses X forwarding with hardware acceleration. This is not available in Windows (as far as I know) and may the reason why running the Docker inside Windows has such slow performance.
+
+## Mac Users:
 
 The X server for MacOS is XQuartz. It may have the same limitations as Windows visualization, but this has not been tested.
 
-## Known issues
-
-Showing OpenSim graphics in Linux uses X forwarding with hardware acceleration. This is not available in Windows (as far as I know) and may the reason why running the Docker inside Windows has such slow performance.
