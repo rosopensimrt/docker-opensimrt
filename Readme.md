@@ -18,7 +18,7 @@ The code was devided into 2 different workspaces to reduce compilation times so 
 
 # Usage
 
-ATTENTION: Currently the docker's catkin\_ws generation is not up-to-date with the version used on the paper (the repository ownerships have changed and it needs updating) and the demonstration scripts are being changed to make sure everything works as intended.
+**ATTENTION: Currently the docker's catkin\_ws generation is not up-to-date with the version used on the paper (the repository ownerships have changed and it needs updating) and the demonstration scripts are being changed to make sure everything works as intended.**
 
 The demos are tmux sessions which load roscore and the necessary roslaunch files. Tmux was used to allow for easier debug. Neovim is also available for editing source code with YouCompleteMe installed for code completion. 
 
