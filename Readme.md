@@ -11,6 +11,30 @@ Build with :
 Run with:
 
     $ bash run_docker_image.sh
+    
+# Structure
+
+The code was devided into 2 different workspaces to reduce compilation times so opensimrt_core can be compiled during the build script and the main catkin workspace can be compiled at runtime. This allowed us to share catkin\_ws as a docker volume and make sure that code changes are not lost between multiple sessions.
+
+# Usage
+
+ATTENTION: Currently the docker's catkin\_ws generation is not up-to-date with the version used on the paper (the repository ownerships have changed and it needs updating) and the demonstration scripts are being changed to make sure everything works as intended.
+
+The demos are tmux sessions which load roscore and the necessary roslaunch files. Tmux was used to allow for easier debug. Neovim is also available for editing source code with YouCompleteMe installed for code completion. 
+
+First source the workspace:
+    
+    $ source /catkin_ws/devel/setup.bash
+    
+And execute the launcher script:
+
+    $ rosrun osrt_ros tmux_session_XXX
+    
+Where XXX is the particular demo.
+
+# Using AR
+
+Your camera needs to be calibrated and the fiducials need to be printed. More details in https://github.com/mysablehats/ar_test
 
 # XIMU port forwarding
 
