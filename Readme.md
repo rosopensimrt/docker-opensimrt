@@ -1,7 +1,8 @@
-# CI "inspired" opensimrt docker
+# docker opensimrt
 
-This package is mostly just their [CI yaml in docker format. ](https://github.com/mitkof6/OpenSimRT)
-You need to have [docker installed](https://docs.docker.com/get-docker/).
+This repository contains scripts for building and launching OpenSimRT with a ROS interface. It was based on the [CI yaml from OpenSimRT. ](https://github.com/mitkof6/OpenSimRT). It was meant to be used on Linux, however it may be possible to use other Docker for Windows or Mac, however those cases have not been thoroughly tested.
+
+To use it you need to have [docker installed](https://docs.docker.com/get-docker/).
 
 Build with :
 
@@ -17,7 +18,7 @@ To use XIMU3 sensors with WiFi, docker needs to be able to access the appropriat
 
 # Docker builds
 
-If instead you just want to use the already built docker image, you get it [here](https://hub.docker.com/r/mysablehats/opensim-rt/tags). We are not freezing versions, so it is possible that this will break in the future. 
+If instead you just want to use the already built docker image, you can get them [here](https://hub.docker.com/r/mysablehats/opensim-rt/tags). We are not freezing versions, so it is possible that the builder script will break in the future. 
 
 The docker with the default version from mitkof6/OpenSIMRT can be obtained with: 
 
