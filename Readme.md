@@ -32,14 +32,6 @@ And execute the launcher script:
     
 Where XXX is the particular demo.
 
-# Using AR
-
-Your camera needs to be calibrated and the fiducials need to be printed. More details in https://github.com/mysablehats/ar_test
-
-# XIMU port forwarding
-
-To use XIMU3 sensors with WiFi, docker needs to be able to access the appropriate ports. Those need to be setup correctly in the "run\_docker\_image.sh" script and possibly in the ros.Dockerfile.
-
 # Docker builds
 
 If instead you just want to use the already built docker image, you can get them [here](https://hub.docker.com/r/mysablehats/opensim-rt/tags). We are not freezing versions, so it is possible that the builder script will break in the future. 
@@ -49,6 +41,14 @@ The docker with the default version from mitkof6/OpenSIMRT can be obtained with:
      docker pull mysablehats/opensim-rt:main
 
 It can also be directly accessed [here](https://hub.docker.com/layers/mysablehats/opensim-rt/main/images/sha256-f3f238759e736f2fd01b9a1eec307b9dbe664f97206e438541bb2685b9fcb38e).
+
+# Using AR
+
+Your camera needs to be calibrated and the fiducials need to be printed. More details in https://github.com/mysablehats/ar_test
+
+# XIMU port forwarding
+
+To use XIMU3 sensors with WiFi, docker needs to be able to access the appropriate ports. Those need to be setup correctly in the "run\_docker\_image.sh" script and possibly in the ros.Dockerfile.
 
 # Windows and Mac users
 
