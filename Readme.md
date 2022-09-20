@@ -1,6 +1,8 @@
 # docker opensimrt
 
-This repository contains scripts for building and launching OpenSimRT with a ROS interface. It was based on the [CI yaml from OpenSimRT](https://github.com/mitkof6/OpenSimRT). It was meant to be used on Linux, however it may be possible to use other Docker for Windows or Mac, however those cases have not been thoroughly tested.
+This repository contains scripts for building and launching OpenSimRT with a ROS interface. It was based on the [CI yaml from OpenSimRT](https://github.com/mitkof6/OpenSimRT). 
+
+While it was meant to be used on Linux, it may be possible to use other Docker for Windows or Mac (see below).
 
 To use it you need to have [docker installed](https://docs.docker.com/get-docker/).
 
