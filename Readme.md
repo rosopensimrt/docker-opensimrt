@@ -32,10 +32,10 @@ Run the docker image loader script:
 
 Navigat to the directory ´catkin_ws/src´ and get the appropriate repositories:
 
-    $ git clone https://github.com/opensimrt-ros/osrt_ros.git
+    $ git clone https://github.com/opensimrt-ros/osrt_ros.git -b devel
     $ git clone https://github.com/opensimrt-ros/gait1992_description.git
     
-If you want to use ALVAR (for ROS noetic use noetic-devel branch of ar\_track\_alvar):
+If you want to use ALVAR:
 
     $ git clone https://github.com/machinekoder/ar_track_alvar.git -b noetic-devel
     $ git clone https://github.com/opensimrt-ros/ar_test
