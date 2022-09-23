@@ -38,15 +38,15 @@ Navigat to the directory ´catkin_ws/src´ and get the appropriate repositories:
 If you want to use ALVAR (for ROS noetic use noetic-devel branch of ar\_track\_alvar):
 
     $ git clone https://github.com/machinekoder/ar_track_alvar.git
-    $ git clone https://github.com/mysablehats/ar_test.git
+    $ git clone https://github.com/opensimrt-ros/ar_test
     
 If you want to use a webcam as video input:
 
-   $ git clone https://github.com/ros-drivers/usb_cam.git
+    $ git clone https://github.com/ros-drivers/usb_cam.git
    
 If you want XIMU3 drivers:
 
-   $ git clone https://github.com/opensimrt-ros/ximu3_ros.git
+    $ git clone https://github.com/opensimrt-ros/ximu3_ros.git
 
 After getting all the relevant packages, you need to use the script to compile the workspace
 
