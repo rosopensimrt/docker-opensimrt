@@ -14,13 +14,45 @@ Run with:
 
     $ bash run_docker_image.sh
     
+Note: currently the PS1 is set to look pretty (it can be confusing to know whether you are inside the docker instance or main machine). For that to work you need to install a Nerd font and set your terminal to use it. The font we use is DroidSansMono Nerd Font Mono, available [here](https://github.com/ryanoasis/nerd-fonts/blob/master/patched-fonts/DroidSansMono/complete/Droid%20Sans%20Mono%20Nerd%20Font%20Complete%20Mono.otf).
+
 # Structure
 
 The code was devided into 2 different workspaces to reduce compilation times so opensimrt_core can be compiled during the build script and the main catkin workspace can be compiled at runtime. This allowed us to share catkin\_ws as a docker volume and make sure that code changes are not lost between multiple sessions.
 
-# Usage
+# First time use:
 
 **ATTENTION: Currently the docker's catkin\_ws generation is not up-to-date with the version used on the paper (the repository ownerships have changed and it needs updating) and the demonstration scripts are being changed to make sure everything works as intended.**
+
+Currently the script that creates the workspace is outdated. This should be updated shortly, but for now you need to follow the following procedure:
+
+Run the docker image loader script: 
+
+    $ bash run_docker_image.sh
+
+Navigat to the directory ´catkin_ws/src´ and get the appropriate repositories:
+
+    $ git clone https://github.com/opensimrt-ros/osrt_ros.git
+    $ git clone https://github.com/opensimrt-ros/gait1992_description.git
+    
+If you want to use ALVAR (for ROS noetic use noetic-devel branch of ar\_track\_alvar):
+
+    $ git clone https://github.com/machinekoder/ar_track_alvar.git
+    $ git clone https://github.com/mysablehats/ar_test.git
+    
+If you want to use a webcam as video input:
+
+   $ git clone https://github.com/ros-drivers/usb_cam.git
+   
+If you want XIMU3 drivers:
+
+   $ git clone https://github.com/opensimrt-ros/ximu3_ros.git
+
+After getting all the relevant packages, you need to use the script to compile the workspace
+
+    $ catkin_build_ws.bash 
+
+# Usage: 
 
 The demos are tmux sessions which load roscore and the necessary roslaunch files. Tmux was used to allow for easier debug. Neovim is also available for editing source code with YouCompleteMe installed for code completion. 
 
@@ -32,7 +64,7 @@ And execute the launcher script:
 
     $ rosrun osrt_ros tmux_session_XXX
     
-Where XXX is the particular demo.
+Where XXX is the particular demo. Use tab completion to list all available options.
 
 # Docker builds
 
