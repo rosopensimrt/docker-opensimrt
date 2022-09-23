@@ -22,23 +22,34 @@ The code was devided into 2 different workspaces to reduce compilation times so 
 
 # First time use:
 
-**ATTENTION: Currently the docker's catkin\_ws generation is not up-to-date with the version used on the paper (the repository ownerships have changed and it needs updating) and the demonstration scripts are being changed to make sure everything works as intended.**
+Run the docker image loader script: 
 
-Currently the script that creates the workspace is outdated. This should be updated shortly, but for now you need to follow the following procedure:
+    $ bash run_docker_image.sh
+
+Inside the docker run the script:
+
+    $ first_time_catkin_builder.sh
+
+You should be set to move to Usage.
+
+## Manually getting the appropriate packages:
+
+In case you don't want to download everything, you can instead create your catkin workspace yourself.
 
 Run the docker image loader script: 
 
     $ bash run_docker_image.sh
 
-Navigat to the directory ´catkin_ws/src´ and get the appropriate repositories:
+Navigate to the directory ´/catkin_ws/src´ and get the appropriate repositories:
 
     $ git clone https://github.com/opensimrt-ros/osrt_ros.git -b devel
+    $ git clone https://github.com/opensimrt-ros/opensimrt_msgs.git
     $ git clone https://github.com/opensimrt-ros/gait1992_description.git
     
 If you want to use ALVAR:
 
     $ git clone https://github.com/machinekoder/ar_track_alvar.git -b noetic-devel
-    $ git clone https://github.com/opensimrt-ros/ar_test
+    $ git clone https://github.com/opensimrt-ros/ar_test -b fixing_cube
     
 If you want to use a webcam as video input:
 
@@ -48,7 +59,7 @@ If you want XIMU3 drivers:
 
     $ git clone https://github.com/opensimrt-ros/ximu3_ros.git
 
-After getting all the relevant packages, you need to use the script to compile the workspace
+After getting all the relevant packages, you need to use the script to compile the workspace (it set's up some environment variables needed by opensimrt\_core and osrt\_ros):
 
     $ catkin_build_ws.bash 
 
