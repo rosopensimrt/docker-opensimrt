@@ -114,5 +114,6 @@ ADD scripts/entrypoint.sh /bin/entrypoint.sh
 
 ADD scripts/catkin.sh /bin/first_time_catkin_builder.sh
 #USER root
+WORKDIR /catkin_ws
 
 ENTRYPOINT [ "entrypoint.sh" ]
