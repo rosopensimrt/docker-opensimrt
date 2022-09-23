@@ -89,7 +89,7 @@ It can also be directly accessed [here](https://hub.docker.com/layers/mysablehat
 
 # Using AR
 
-Your camera needs to be calibrated and the fiducials need to be printed. More details in https://github.com/mysablehats/ar_test
+Your camera needs to be calibrated and the fiducials need to be printed. More details in https://github.com/opensimrt-ros/ar_test
 
 # XIMU port forwarding
 
