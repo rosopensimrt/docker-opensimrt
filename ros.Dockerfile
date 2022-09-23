@@ -112,4 +112,7 @@ RUN bash ~/.create_bashrcs.sh
 #ADD tmux/ /usr/local/bin # moved to a volume
 ADD scripts/entrypoint.sh /bin/entrypoint.sh 
 
+ADD scripts/catkin.sh /bin/first_time_catkin_builder.sh
+#USER root
+
 ENTRYPOINT [ "entrypoint.sh" ]
