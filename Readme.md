@@ -103,6 +103,10 @@ Where XXX is the particular demo. Use tab completion to list all available optio
 
 - `tmux_session_test_single_ximu_with_upperbody.bash` Test XIMU3 single input with static transforms to pelvis, upperbody, only IK
 
+\* Note here the filtering is still happening inside the node, so there is additional 35 samples wait until there are enough values for visualization
+
+\*\* Here the speed of the playback is reduced to 33fps as the algorithm cannot run faster on our machine. Your machine likely has different specs, so change the rate\_divider accordingly to be able to reach convergence for every frame.
+
 # Docker builds
 
 ## Latest build
