@@ -77,7 +77,7 @@ And execute the launcher script:
     
 Where XXX is the particular demo. Use tab completion to list all available options.
 
-## Existing nodes:
+## Existing examples:
 
 - `tmux_session_ar.bash` Test ALVAR marker cube
 
