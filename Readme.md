@@ -77,6 +77,32 @@ And execute the launcher script:
     
 Where XXX is the particular demo. Use tab completion to list all available options.
 
+## Existing nodes:
+
+- `tmux_session_ar.bash` Test ALVAR marker cube
+
+- `tmux_session_test_agrf.bash` Test acceleration based state-machine GRFM predictions  
+
+- `tmux_session_test_cgrf.bash` Test contact force based state-machine GRFM predictions
+
+- `tmux_session_test_gait1992_visuals.bash` Test URDF model
+
+- `tmux_session_test_id_agrf.bash` Test ID and acceleration based GRFM pipeline*
+
+- `tmux_session_test_id_cgrf.bash` Test ID and contact-force based GRFM pipeline*
+
+- `tmux_session_test_id_combined_agrf.bash` Test ID+SO and acceleration based GRFM pipeline*,**
+
+- `tmux_session_test_id_combined_cgrf.bash` Test ID+SO and contact-force based GRFM pipeline*,**
+
+- `tmux_session_test_single_ar_with_lowerbody.bash` Test ALVAR marker cube single input with static transforms to pelvis, lowerbody, only IK
+
+- `tmux_session_test_single_ar_with_upperbody.bash` Test ALVAR marker cube single input with static transforms to pelvis, upperbody, only IK
+
+- `tmux_session_test_single_ximu_with_lowerbody.bash` Test XIMU3 single input with static transforms to pelvis, lowerbody, only IK
+
+- `tmux_session_test_single_ximu_with_upperbody.bash` Test XIMU3 single input with static transforms to pelvis, upperbody, only IK
+
 # Docker builds
 
 ## Latest build
