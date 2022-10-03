@@ -108,12 +108,23 @@ RUN echo "source ~/.bash_git" >> ~/.bashrc && \
     echo "source ~/.bash_bar" >> ~/.bashrc
 
 ADD scripts/create_bashrcs.bash ${HOME_DIR}/.create_bashrcs.sh
-RUN bash ~/.create_bashrcs.sh
 #ADD tmux/ /usr/local/bin # moved to a volume
 ADD scripts/entrypoint.sh /bin/entrypoint.sh 
 
 ADD scripts/catkin.sh /bin/first_time_catkin_builder.sh
 #USER root
+WORKDIR /opt/dependencies/opensim-core/lib/python3.6/site-packages/
+USER root
+
+RUN python3.8 setup.py install
+WORKDIR /usr/lib/x86_64-linux-gnu
+RUN apt-get install libpython-all-dev -y
+RUN ln -s libpython3.8.so.1.0 libpython3.6m.so.1.0
+USER ${uid}
+RUN echo 'export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/opt/dependencies/opensim-core/lib' >> ~/.bashrc
+#RUN bash ~/.create_bashrcs.sh
+
+
 WORKDIR /catkin_ws
 
 ENTRYPOINT [ "entrypoint.sh" ]
