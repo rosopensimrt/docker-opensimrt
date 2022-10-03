@@ -77,9 +77,65 @@ And execute the launcher script:
     
 Where XXX is the particular demo. Use tab completion to list all available options.
 
+## Existing examples:
+
+- `tmux_session_ar.bash` Test ALVAR marker cube
+
+- `tmux_session_test_agrf.bash` Test acceleration based state-machine GRFM predictions  
+
+- `tmux_session_test_cgrf.bash` Test contact force based state-machine GRFM predictions
+
+- `tmux_session_test_gait1992_visuals.bash` Test URDF model
+
+- `tmux_session_test_id_agrf.bash` Test ID and acceleration based GRFM pipeline*
+
+- `tmux_session_test_id_cgrf.bash` Test ID and contact-force based GRFM pipeline*
+
+- `tmux_session_test_id_combined_agrf.bash` Test ID+SO and acceleration based GRFM pipeline*,**
+
+- `tmux_session_test_id_combined_cgrf.bash` Test ID+SO and contact-force based GRFM pipeline*,**
+
+- `tmux_session_test_single_ar_with_lowerbody.bash` Test ALVAR marker cube single input with static transforms to pelvis, lowerbody, only IK
+
+- `tmux_session_test_single_ar_with_upperbody.bash` Test ALVAR marker cube single input with static transforms to pelvis, upperbody, only IK
+
+- `tmux_session_test_single_ximu_with_lowerbody.bash` Test XIMU3 single input with static transforms to pelvis, lowerbody, only IK
+
+- `tmux_session_test_single_ximu_with_upperbody.bash` Test XIMU3 single input with static transforms to pelvis, upperbody, only IK
+
+\* Note here the filtering is still happening inside the node, so there is additional 35 samples wait until there are enough values for visualization
+
+\*\* Here the speed of the playback is reduced to 33fps as the algorithm cannot run faster on our machine. Your machine likely has different specs, so change the rate\_divider accordingly to be able to reach convergence for every frame.
+
 # Docker builds
 
-If instead you just want to use the already built docker image, you can get them [here](https://hub.docker.com/r/mysablehats/opensim-rt/tags). We are not freezing versions, so it is possible that the builder script will break in the future. 
+## Latest build
+
+The latest version of the ros/docker available can be downloaded with:
+
+    docker pull rosopensimrt/ros
+
+To run the docker you just downloaded you need X forwarding to work, so 
+
+    xhost +
+    
+Under linux it can then be run with:
+
+	docker run --rm -it \
+		-p 9000:9000/udp \
+		-p 8001:8001/udp \
+		-p 10000:10000/udp \
+		-e DISPLAY=$DISPLAY -v /tmp/.X11-unix:/tmp/.X11-unix \
+		--name=opensimrt_ros \
+		--device=/dev/dri:/dev/dri \
+		--device=/dev/video0:/dev/video0 \
+		-v $(pwd)/catkin_ws:/catkin_ws \
+		-v $(pwd)/tmux:/usr/local/bin/tmux_session\
+		rosopensimrt/ros:latest /bin/bash
+
+## Older builds
+
+If instead you just want to use the older already built docker images, you can get them [here](https://hub.docker.com/r/mysablehats/opensim-rt/tags). We are not freezing versions, so it is possible that the builder script will break in the future. 
 
 The docker with the default version from mitkof6/OpenSIMRT can be obtained with: 
 
