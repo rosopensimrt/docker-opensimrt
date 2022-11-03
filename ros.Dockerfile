@@ -120,11 +120,15 @@ RUN python3.8 setup.py install
 WORKDIR /usr/lib/x86_64-linux-gnu
 RUN apt-get install libpython-all-dev -y
 RUN ln -s libpython3.8.so.1.0 libpython3.6m.so.1.0
+RUN apt-get install iputils-ping
 USER ${uid}
 RUN echo 'export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/opt/dependencies/opensim-core/lib' >> ~/.bashrc
 #RUN bash ~/.create_bashrcs.sh
 
+RUN pip3 install --upgrade pip && hash -r && pip3 install --upgrade pip && pip3 install protobuf==3.20.1
 
+#port for insoles
+EXPOSE 9999
 WORKDIR /catkin_ws
-
+#USER root
 ENTRYPOINT [ "entrypoint.sh" ]

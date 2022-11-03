@@ -13,10 +13,12 @@ if [ "$(uname)" == "Darwin" ]; then
 elif [ "$(expr substr $(uname -s) 1 5)" == "Linux" ]; then
     # Do something under GNU/Linux platform
 	xhost +
+	#docker run --rm -it --network=host\
 	docker run --rm -it \
 		-p 9000:9000/udp \
 		-p 8001:8001/udp \
 		-p 10000:10000/udp \
+		-p 9999:9999 \
 		-e DISPLAY=$DISPLAY -v /tmp/.X11-unix:/tmp/.X11-unix \
 		--name=$NAME \
 		--device=/dev/dri:/dev/dri \
