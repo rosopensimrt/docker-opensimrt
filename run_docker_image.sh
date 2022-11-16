@@ -13,6 +13,16 @@ if [ "$(uname)" == "Darwin" ]; then
 elif [ "$(expr substr $(uname -s) 1 5)" == "Linux" ]; then
     # Do something under GNU/Linux platform
 	xhost +
+	FILES="/dev/video*"
+	LINE=""
+	for f in $FILES
+	do
+	  echo "Adding video device $f ..."
+	  # take action on each file. $f store current file name
+	  LINE="--device=$f:$f $LINE"
+	done
+	echo $LINE
+
 	#docker run --rm -it --network=host\
 	docker run --rm -it \
 		-p 9000:9000/udp \
@@ -21,8 +31,7 @@ elif [ "$(expr substr $(uname -s) 1 5)" == "Linux" ]; then
 		-p 9999:9999 \
 		-e DISPLAY=$DISPLAY -v /tmp/.X11-unix:/tmp/.X11-unix \
 		--name=$NAME \
-		--device=/dev/dri:/dev/dri \
-		--device=/dev/video0:/dev/video0 \
+		--device=/dev/dri:/dev/dri $LINE \
 		-v $(pwd)/catkin_ws:/catkin_ws \
 		-v $(pwd)/tmux:/usr/local/bin/tmux_session\
 		mysablehats/opensim-rt:$BRANCH /bin/bash
