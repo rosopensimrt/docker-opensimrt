@@ -49,13 +49,13 @@ WORKDIR /catkin_opensim/src
 ENV OPENSIMRTDIR=opensimrt_core
 RUN echo "I use this to make it get stuff from git again"
 
-RUN git clone https://github.com/frederico-klein/OpenSimRT.git ./$OPENSIMRTDIR -b slim-death-noimus  && ln -s /srv/data $OPENSIMRTDIR/data && echo hello 
+RUN git clone https://github.com/opensimrt-ros/opensimrt_core.git ./$OPENSIMRTDIR -b slim-devel  && ln -s /srv/data $OPENSIMRTDIR/data && echo hello 
 #RUN git clone https://github.com/frederico-klein/OpenSimRT.git ./opensimrt -b v0.03.1ros --depth 1 && ln -s /srv/data opensimrt/data  
 RUN sed 's@~@/opt@' ./$OPENSIMRTDIR/.github/workflows/env_variables >> ./$OPENSIMRTDIR/env.sh
 
-RUN git clone https://github.com/mysablehats/opensimrt_msgs.git -b main
+RUN git clone https://github.com/opensimrt-ros/opensimrt_msgs.git -b main
 
-RUN git clone https://github.com/mysablehats/opensimrt_bridge.git -b devel
+RUN git clone https://github.com/opensimrt-ros/opensimrt_bridge.git -b devel
 
 ENV PYTHONPATH=/opt/ros/noetic/lib/python3/dist-packages/:$PYTHONPATH
 
@@ -109,7 +109,6 @@ RUN echo "source ~/.bash_git" >> ~/.bashrc && \
 
 ADD scripts/create_bashrcs.bash ${HOME_DIR}/.create_bashrcs.sh
 #ADD tmux/ /usr/local/bin # moved to a volume
-ADD scripts/entrypoint.sh /bin/entrypoint.sh 
 
 ADD scripts/catkin.sh /bin/first_time_catkin_builder.sh
 #USER root
@@ -129,6 +128,9 @@ RUN pip3 install --upgrade pip && hash -r && pip3 install --upgrade pip && pip3 
 
 #port for insoles
 EXPOSE 9999
+
+ADD scripts/insoles.bash /bin/insoles.bash
 WORKDIR /catkin_ws
 #USER root
+ADD scripts/entrypoint.sh /bin/entrypoint.sh 
 ENTRYPOINT [ "entrypoint.sh" ]
