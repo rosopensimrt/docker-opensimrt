@@ -117,7 +117,7 @@ USER root
 
 RUN python3.8 setup.py install
 WORKDIR /usr/lib/x86_64-linux-gnu
-RUN apt-get install libpython-all-dev -y
+RUN apt-get install libpython-all-dev libeigen3-dev -y
 RUN ln -s libpython3.8.so.1.0 libpython3.6m.so.1.0
 RUN apt-get install iputils-ping
 USER ${uid}
