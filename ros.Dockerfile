@@ -22,7 +22,7 @@ ADD scripts/ximu.bash /bin
 RUN /bin/ximu.bash
 #this is a volume now so we can't build it at docker build time
 #RUN bash catkin_build_ws.bash
-
+RUN echo "reinstall neovim"
 RUN wget https://bootstrap.pypa.io/get-pip.py && python3 get-pip.py && python3 -m pip install --upgrade pynvim
 ADD vim /nvim
 ADD scripts/vim_install.bash /nvim
@@ -122,7 +122,7 @@ RUN ln -s libpython3.8.so.1.0 libpython3.6m.so.1.0
 RUN apt-get install iputils-ping
 USER ${uid}
 RUN echo 'export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/opt/dependencies/opensim-core/lib' >> ~/.bashrc
-#RUN bash ~/.create_bashrcs.sh
+RUN bash ~/.create_bashrcs.sh
 
 RUN pip3 install --upgrade pip && hash -r && pip3 install --upgrade pip && pip3 install protobuf==3.20.1
 
