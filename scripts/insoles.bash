@@ -11,8 +11,9 @@ git pull local devel-insoles && \
 git checkout local/devel-insoles
 cd /catkin_opensim/src/opensimrt_msgs
 git remote add local /catkin_ws/opensimrt_msgs.git && \
-git pull local devel && \
-git checkout local/devel
+git pull local devel && git pull local events &&\
+git checkout local/events
+#git checkout local/devel
 cd /catkin_opensim/
 rm -rf build devel && catkin_build_opensimrt.bash
 

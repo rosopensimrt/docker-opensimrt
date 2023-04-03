@@ -29,12 +29,17 @@ elif [ "$(expr substr $(uname -s) 1 5)" == "Linux" ]; then
 		-p 8001:8001/udp \
 		-p 10000:10000/udp \
 		-p 9999:9999 \
+		-p 1030:1030/udp \
 		-e DISPLAY=$DISPLAY -v /tmp/.X11-unix:/tmp/.X11-unix \
 		--name=$NAME \
+		--device=/dev/snd:/dev/snd \
 		--device=/dev/dri:/dev/dri $LINE \
 		-v $(pwd)/catkin_ws:/catkin_ws \
 		-v $(pwd)/tmux:/usr/local/bin/tmux_session\
+		-v /run/user/${USER_UID}/pulse:/run/user/1000/pulse \
+		-e PULSE_SERVER=unix:/run/user/1000/pulse/native \
 		mysablehats/opensim-rt:$BRANCH /bin/bash
+		#-u 1000:1000 \
 elif [ "$(expr substr $(uname -s) 1 10)" == "MINGW32_NT" ]; then
     # Do something under 32 bits Windows NT platform
 	docker run --rm -it \

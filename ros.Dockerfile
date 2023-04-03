@@ -40,7 +40,7 @@ ARG gid=1000
 #ARG VIDEOGROUP=${VIDEOGROUP}
 #RUN groupadd -g $VIDEOGROUP video
 RUN groupadd -g ${gid} ${group}
-RUN useradd -u ${uid} -g root -G sudo,video,${gid} -s /bin/sh -m ${user} -p123456
+RUN useradd -u ${uid} -g root -G sudo,audio,video,${gid} -s /bin/bash -m ${user} -p123456
 # Switch to user
 USER ${uid}
 
@@ -53,9 +53,9 @@ RUN git clone https://github.com/opensimrt-ros/opensimrt_core.git ./$OPENSIMRTDI
 #RUN git clone https://github.com/frederico-klein/OpenSimRT.git ./opensimrt -b v0.03.1ros --depth 1 && ln -s /srv/data opensimrt/data  
 RUN sed 's@~@/opt@' ./$OPENSIMRTDIR/.github/workflows/env_variables >> ./$OPENSIMRTDIR/env.sh
 
-RUN git clone https://github.com/opensimrt-ros/opensimrt_msgs.git -b main
+RUN git clone https://github.com/opensimrt-ros/opensimrt_msgs.git -b devel
 
-RUN git clone https://github.com/opensimrt-ros/opensimrt_bridge.git -b devel
+RUN git clone https://github.com/opensimrt-ros/opensimrt_bridge.git -b devel-insoles
 
 ENV PYTHONPATH=/opt/ros/noetic/lib/python3/dist-packages/:$PYTHONPATH
 
@@ -119,7 +119,7 @@ RUN python3.8 setup.py install
 WORKDIR /usr/lib/x86_64-linux-gnu
 RUN apt-get install libpython-all-dev libeigen3-dev -y
 RUN ln -s libpython3.8.so.1.0 libpython3.6m.so.1.0
-RUN apt-get install iputils-ping
+RUN apt-get install iputils-ping alsa-utils pulseaudio libasound2 libasound2-plugins -y
 USER ${uid}
 RUN echo 'export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/opt/dependencies/opensim-core/lib' >> ~/.bashrc
 RUN bash ~/.create_bashrcs.sh
@@ -131,6 +131,10 @@ EXPOSE 9999
 
 ADD scripts/insoles.bash /bin/insoles.bash
 WORKDIR /catkin_ws
-#USER root
 ADD scripts/entrypoint.sh /bin/entrypoint.sh 
+USER root
+ADD scripts/configure_sound.bash /tmp/conf_alsa.bash
+RUN /tmp/conf_alsa.bash
+USER 1000
+#RUN apt install cowsay -y
 ENTRYPOINT [ "entrypoint.sh" ]
