@@ -132,6 +132,8 @@ EXPOSE 9999
 ADD scripts/insoles.bash /bin/insoles.bash
 WORKDIR /catkin_ws
 ADD scripts/entrypoint.sh /bin/entrypoint.sh 
+## dynamic reconfigure has problems with newer versions of pyyaml
+RUN pip install PyYAML==5.3
 USER root
 ADD scripts/configure_sound.bash /tmp/conf_alsa.bash
 RUN /tmp/conf_alsa.bash
