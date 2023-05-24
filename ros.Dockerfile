@@ -90,7 +90,7 @@ RUN echo "source /catkin_opensim/devel/setup.bash" >> ~/.bash_history
 
 RUN /bin/catkin_build_opensimrt.bash
 
-EXPOSE 8080/udp
+#EXPOSE 8080/udp
 
 EXPOSE 9000/udp
 EXPOSE 9001/udp
@@ -133,10 +133,14 @@ ADD scripts/insoles.bash /bin/insoles.bash
 WORKDIR /catkin_ws
 ADD scripts/entrypoint.sh /bin/entrypoint.sh 
 ## dynamic reconfigure has problems with newer versions of pyyaml
-RUN pip install PyYAML==5.3
+## also need pupil and nest for eye_tracker
+RUN pip install PyYAML==5.3 mock numpy pupil-labs-realtime-api nest_asyncio
 USER root
 ADD scripts/configure_sound.bash /tmp/conf_alsa.bash
 RUN /tmp/conf_alsa.bash
+#RUN apt remove python -y
 USER 1000
+RUN rosdep update
 #RUN apt install cowsay -y
+#EXPOSE 8080/tcp
 ENTRYPOINT [ "entrypoint.sh" ]

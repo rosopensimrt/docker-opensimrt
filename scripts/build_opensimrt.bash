@@ -12,4 +12,5 @@ catkin_make  \
             -DBUILD_MOMENT_ARM=ON \
             -DBUILD_IMU=OFF \
             -DBUILD_UIMU=ON \
-            -DBUILD_VICON=ON 
+            -DBUILD_VICON=ON \
+	    "$@"
