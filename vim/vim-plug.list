@@ -16,6 +16,7 @@ silent! let g:plugs['vim-github-dashboard'].commit = 'a639ab203418210eff3e09cea8
 silent! let g:plugs['vim-nerdtree-syntax-highlight'].commit = '5178ee4d7f4e7761187df30bb709f703d91df18a'
 silent! let g:plugs['vim-tmux-navigator'].commit = '9ca5bfe5bd274051b5dd796cc150348afc993b80'
 silent! let g:plugs['vimtex'].commit = 'c72d34bfca5972c36bb72c39098c62ea213d73ae'
+silent! let g:plugs['vim-templates'].commit = '0394471d6a3ace7618c443800ee8c1777ed8988b'
 
 PlugUpdate!
 

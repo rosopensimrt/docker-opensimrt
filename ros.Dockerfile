@@ -2,7 +2,35 @@ FROM ros:noetic-ros-base
 
 ENV DEBIAN_FRONTEND=noninteractive
 
-RUN apt-get update && apt-get install build-essential freeglut3-dev git libxi-dev libxmu-dev liblapack-dev doxygen gdb cmake wget xz-utils vim python ros-noetic-desktop-full v4l-utils catkin-lint tmux --yes && rm -rf /var/lib/apt/lists/*
+RUN apt-get update && apt-get install \
+	build-essential \
+	freeglut3-dev \
+	git \
+	libxi-dev \
+	libxmu-dev \
+	liblapack-dev \
+	doxygen \
+	gdb \
+	cmake \
+	wget \
+	xz-utils \
+	vim \
+	python \
+	ros-noetic-desktop-full \
+	v4l-utils \
+	catkin-lint \
+	iputils-ping \
+	alsa-utils \
+	pulseaudio \
+	libasound2 \
+	libasound2-plugins \
+	libpython-all-dev \
+	libeigen3-dev\
+	tmux \
+	--yes && rm -rf /var/lib/apt/lists/*
+ADD scripts/configure_sound.bash /tmp/conf_alsa.bash
+RUN /tmp/conf_alsa.bash
+
 WORKDIR /opt/dependencies
 
 RUN wget https://sourceforge.net/projects/dependencies/files/opensim-core/opensim-core-4.1-ubuntu-18.04.tar.xz && \
@@ -22,13 +50,18 @@ ADD scripts/ximu.bash /bin
 RUN /bin/ximu.bash
 #this is a volume now so we can't build it at docker build time
 #RUN bash catkin_build_ws.bash
+
+## dynamic reconfigure has problems with newer versions of pyyaml
+## also need pupil and nest for eye_tracker
+RUN wget https://bootstrap.pypa.io/get-pip.py && python3 get-pip.py && python3 -m pip install --upgrade pynvim && \
+	pip3 install --upgrade pip && hash -r && pip3 install --upgrade pip && pip3 install protobuf==3.20.1 mock numpy pupil-labs-realtime-api nest_asyncio && \
+	pip3 install --ignore-installed PyYAML==5.3 
+
 RUN echo "reinstall neovim"
-RUN wget https://bootstrap.pypa.io/get-pip.py && python3 get-pip.py && python3 -m pip install --upgrade pynvim
 ADD vim /nvim
 ADD scripts/vim_install.bash /nvim
 RUN /nvim/vim_install.bash
 ADD tmux/.tmux.conf /etc/tmux
-
 
 RUN echo "I use this to make it get stuff from git again"
 
@@ -49,7 +82,7 @@ WORKDIR /catkin_opensim/src
 ENV OPENSIMRTDIR=opensimrt_core
 RUN echo "I use this to make it get stuff from git again"
 
-RUN git clone https://github.com/opensimrt-ros/opensimrt_core.git ./$OPENSIMRTDIR -b slim-devel  && ln -s /srv/data $OPENSIMRTDIR/data && echo hello 
+RUN git clone https://github.com/opensimrt-ros/opensimrt_core.git ./$OPENSIMRTDIR -b slim-devel  && ln -s /srv/data $OPENSIMRTDIR/data # && echo hello 
 #RUN git clone https://github.com/frederico-klein/OpenSimRT.git ./opensimrt -b v0.03.1ros --depth 1 && ln -s /srv/data opensimrt/data  
 RUN sed 's@~@/opt@' ./$OPENSIMRTDIR/.github/workflows/env_variables >> ./$OPENSIMRTDIR/env.sh
 
@@ -76,6 +109,14 @@ ENV LD_LIBRARY_PATH=/opt/dependencies/opensim-core/lib/
 #WORKDIR /catkin_opensim/src/opensimrt
 
 #RUN git pull && git checkout permissions 
+USER root
+WORKDIR /opt/dependencies/opensim-core/lib/python3.6/site-packages/
+RUN python3.8 setup.py install
+WORKDIR /usr/lib/x86_64-linux-gnu
+RUN ln -s libpython3.8.so.1.0 libpython3.6m.so.1.0
+USER ${uid}
+RUN echo 'export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/opt/dependencies/opensim-core/lib' >> ~/.bashrc
+
 ENV HOME_DIR=/home/${user}
 ADD scripts/vim_configure.bash ${HOME_DIR}/
 RUN ~/vim_configure.bash
@@ -91,6 +132,7 @@ RUN echo "source /catkin_opensim/devel/setup.bash" >> ~/.bash_history
 RUN /bin/catkin_build_opensimrt.bash
 
 #EXPOSE 8080/udp
+#EXPOSE 8080/tcp
 
 EXPOSE 9000/udp
 EXPOSE 9001/udp
@@ -100,6 +142,8 @@ EXPOSE 8001/udp
 EXPOSE 8000/udp
 
 expose 7000/tcp
+#port for insoles
+EXPOSE 9999
 
 ##BLING
 ADD scripts/bash_git.bash ${HOME_DIR}/.bash_git
@@ -108,39 +152,17 @@ RUN echo "source ~/.bash_git" >> ~/.bashrc && \
     echo "source ~/.bash_bar" >> ~/.bashrc
 
 ADD scripts/create_bashrcs.bash ${HOME_DIR}/.create_bashrcs.sh
+RUN bash ~/.create_bashrcs.sh
 #ADD tmux/ /usr/local/bin # moved to a volume
 
 ADD scripts/catkin.sh /bin/first_time_catkin_builder.sh
-#USER root
-WORKDIR /opt/dependencies/opensim-core/lib/python3.6/site-packages/
-USER root
 
-RUN python3.8 setup.py install
-WORKDIR /usr/lib/x86_64-linux-gnu
-RUN apt-get install libpython-all-dev libeigen3-dev -y
-RUN ln -s libpython3.8.so.1.0 libpython3.6m.so.1.0
-RUN apt-get install iputils-ping alsa-utils pulseaudio libasound2 libasound2-plugins -y
-USER ${uid}
-RUN echo 'export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/opt/dependencies/opensim-core/lib' >> ~/.bashrc
-RUN bash ~/.create_bashrcs.sh
-
-RUN pip3 install --upgrade pip && hash -r && pip3 install --upgrade pip && pip3 install protobuf==3.20.1
-
-#port for insoles
-EXPOSE 9999
-
+## gets latest local environment
 ADD scripts/insoles.bash /bin/insoles.bash
 WORKDIR /catkin_ws
 ADD scripts/entrypoint.sh /bin/entrypoint.sh 
-## dynamic reconfigure has problems with newer versions of pyyaml
-## also need pupil and nest for eye_tracker
-RUN pip install PyYAML==5.3 mock numpy pupil-labs-realtime-api nest_asyncio
-USER root
-ADD scripts/configure_sound.bash /tmp/conf_alsa.bash
-RUN /tmp/conf_alsa.bash
 #RUN apt remove python -y
-USER 1000
-RUN rosdep update
 #RUN apt install cowsay -y
-#EXPOSE 8080/tcp
+
+RUN rosdep update
 ENTRYPOINT [ "entrypoint.sh" ]
