@@ -80,7 +80,7 @@ USER ${uid}
 WORKDIR /catkin_opensim/src
 
 ENV OPENSIMRTDIR=opensimrt_core
-RUN echo "I use this to make it get stuff from git again"
+#RUN echo "I use this to make it get stuff from git again"
 
 RUN git clone https://github.com/opensimrt-ros/opensimrt_core.git ./$OPENSIMRTDIR -b slim-devel  && ln -s /srv/data $OPENSIMRTDIR/data # && echo hello 
 #RUN git clone https://github.com/frederico-klein/OpenSimRT.git ./opensimrt -b v0.03.1ros --depth 1 && ln -s /srv/data opensimrt/data  
@@ -88,7 +88,7 @@ RUN sed 's@~@/opt@' ./$OPENSIMRTDIR/.github/workflows/env_variables >> ./$OPENSI
 
 RUN git clone https://github.com/opensimrt-ros/opensimrt_msgs.git -b devel
 
-RUN git clone https://github.com/opensimrt-ros/opensimrt_bridge.git -b devel-insoles
+RUN git clone https://github.com/opensimrt-ros/opensimrt_bridge.git -b devel
 
 ENV PYTHONPATH=/opt/ros/noetic/lib/python3/dist-packages/:$PYTHONPATH
 
@@ -114,6 +114,8 @@ WORKDIR /opt/dependencies/opensim-core/lib/python3.6/site-packages/
 RUN python3.8 setup.py install
 WORKDIR /usr/lib/x86_64-linux-gnu
 RUN ln -s libpython3.8.so.1.0 libpython3.6m.so.1.0
+## fixing bug in view_frames
+RUN sed -i "s/\(subprocess.Popen([^)]*\)/\1,universal_newlines=True/" /opt/ros/noetic/lib/tf/view_frames 
 USER ${uid}
 RUN echo 'export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/opt/dependencies/opensim-core/lib' >> ~/.bashrc
 
@@ -158,7 +160,8 @@ RUN bash ~/.create_bashrcs.sh
 ADD scripts/catkin.sh /bin/first_time_catkin_builder.sh
 
 ## gets latest local environment
-ADD scripts/insoles.bash /bin/insoles.bash
+ADD scripts/set_local_branches.bash /bin/set_local_branches.bash
+#ADD scripts/get_latest_local_branches.bash /bin/get_latest_local_branches.bash
 WORKDIR /catkin_ws
 ADD scripts/entrypoint.sh /bin/entrypoint.sh 
 #RUN apt remove python -y

@@ -1,7 +1,11 @@
+#BRANCH=latest
 BRANCH=$(git branch --show-current )
 mkdir -p catkin_ws/devel
 mkdir -p catkin_ws/build
 NAME=opensimrt_ros_
+DOCKER_IMAGE_NAME=mysablehats/opensim-rt
+#DOCKER_IMAGE_NAME=rosopensimrt/ros
+echo -en '\e]0;MAIN WINDOW DO NOT CLOSE!!!!\a'
 
 if [ "$(uname)" == "Darwin" ]; then
     # Do something under Mac OS X platform        
@@ -9,7 +13,7 @@ if [ "$(uname)" == "Darwin" ]; then
 		-e DISPLAY=$DISPLAY -v /tmp/.X11-unix:/tmp/.X11-unix \
 		--name=$NAME \
 		--device=/dev/dri:/dev/dri \
-		mysablehats/opensim-rt:$BRANCH
+		$DOCKER_IMAGE_NAME:$BRANCH
 elif [ "$(expr substr $(uname -s) 1 5)" == "Linux" ]; then
     # Do something under GNU/Linux platform
 	xhost +
@@ -38,7 +42,7 @@ elif [ "$(expr substr $(uname -s) 1 5)" == "Linux" ]; then
 		-v $(pwd)/tmux:/usr/local/bin/tmux_session\
 		-v /run/user/${USER_UID}/pulse:/run/user/1000/pulse \
 		-e PULSE_SERVER=unix:/run/user/1000/pulse/native \
-		mysablehats/opensim-rt:$BRANCH /bin/bash
+		$DOCKER_IMAGE_NAME:$BRANCH /bin/bash
 		#-u 1000:1000 \
 elif [ "$(expr substr $(uname -s) 1 10)" == "MINGW32_NT" ]; then
     # Do something under 32 bits Windows NT platform
@@ -46,13 +50,13 @@ elif [ "$(expr substr $(uname -s) 1 10)" == "MINGW32_NT" ]; then
 		-e DISPLAY=$DISPLAY -v /tmp/.X11-unix:/tmp/.X11-unix \
 		--name=$NAME \
 		--device=/dev/dri:/dev/dri \
-		mysablehats/opensim-rt:$BRANCH
+		$DOCKER_IMAGE_NAME:$BRANCH
 elif [ "$(expr substr $(uname -s) 1 10)" == "MINGW64_NT" ]; then
     # Do something under 64 bits Windows NT platform
 	winpty docker run --rm -it -p 8080:8080/udp \
 		-e DISPLAY=$DISPLAY -v /tmp/.X11-unix:/tmp/.X11-unix \
 		--name=$NAME \
-		mysablehats/opensim-rt:$BRANCH
+		$DOCKER_IMAGE_NAME:$BRANCH
 
 
 fi
