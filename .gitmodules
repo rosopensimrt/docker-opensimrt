@@ -1,0 +1,22 @@
+[submodule "catkin_ws/src/ar_test"]
+	path = catkin_ws/src/ar_test
+	url = git@github.com:opensimrt-ros/ar_test.git
+[submodule "catkin_ws/src/ar_track_alvar"]
+	path = catkin_ws/src/ar_track_alvar
+	url = https://github.com/machinekoder/ar_track_alvar.git
+	branch = noetic-devel
+[submodule "catkin_ws/src/custom_clock"]
+	path = catkin_ws/src/custom_clock
+	url = git@github.com:opensimrt-ros/custom_clock.git
+[submodule "catkin_ws/src/gait1992_description"]
+	path = catkin_ws/src/gait1992_description
+	url = git@github.com:opensimrt-ros/gait1992_description
+	branch = devel
+[submodule "catkin_ws/src/osrt_ros"]
+	path = catkin_ws/src/osrt_ros
+	url = git@github.com:opensimrt-ros/osrt_ros
+	branch = devel
+[submodule "catkin_ws/src/tmux_session"]
+	path = catkin_ws/src/tmux_session
+	url = git@github.com:opensimrt-ros/tmux_session
+	branch = master
