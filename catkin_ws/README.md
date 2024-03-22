@@ -37,4 +37,13 @@ currently in src/:
 	origin	git@github.com:mysablehats/ximu3_ros.git (fetch)
 	origin	git@github.com:mysablehats/ximu3_ros.git (push)
 
+# Subproject 1 Documentation
+[Link to ALVAR Documentation](build/ar_track_alvar/html/index.html)
+
+# Subproject 2 Documentation
+[Link to OSRT\_ROS Documentation](build/osrt_ros/html/index.html)
+
+# Subproject 3 Documentation
+[Link to imu\_tools Documentation](build/imu_tools/html/index.html)
+
 

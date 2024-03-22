@@ -2,10 +2,15 @@
 BRANCH=$(git branch --show-current )
 mkdir -p catkin_ws/devel
 mkdir -p catkin_ws/build
-NAME=opensimrt_ros_
+NAME=${1:-opensimrt_ros_}
+CATKIN_WS_DIR=${2:-$(pwd)/catkin_ws}
 DOCKER_IMAGE_NAME=mysablehats/opensim-rt
 #DOCKER_IMAGE_NAME=rosopensimrt/ros
-echo -en '\e]0;MAIN WINDOW DO NOT CLOSE!!!!\a'
+echo -en "\e]0;MAIN WINDOW DO NOT CLOSE!!!! [$CATKIN_WS_DIR]\a"
+#!/bin/bash
+
+BUS=$(lsusb | grep 8086 | cut -d " " -f 2)
+PORT=$(lsusb | grep 8086 | cut -d " " -f 4 | cut -d ":" -f 1)
 
 if [ "$(uname)" == "Darwin" ]; then
     # Do something under Mac OS X platform        
@@ -16,7 +21,20 @@ if [ "$(uname)" == "Darwin" ]; then
 		$DOCKER_IMAGE_NAME:$BRANCH
 elif [ "$(expr substr $(uname -s) 1 5)" == "Linux" ]; then
     # Do something under GNU/Linux platform
-	xhost +
+	#let's also run the vm for the android device
+	# it doesnt seem to work if the bt dongle is already plugged in, so let's check for that
+	VENDOR_DEV=0bda:8771
+	BT_INSERTED=$(lsusb -d $VENDOR_DEV)
+	if [[ $BT_INSERTED ]]; then
+		echo "Remove BT device before starting VM..."
+		exit 0
+	fi
+	echo "You can put the dongle after the android vm has started"
+	scripts/how_to_start_bt_androidx86_vm.py &
+
+	VBoxManage startvm "Android x86"
+
+    	xhost +
 	FILES="/dev/video*"
 	LINE=""
 	for f in $FILES
@@ -27,6 +45,7 @@ elif [ "$(expr substr $(uname -s) 1 5)" == "Linux" ]; then
 	done
 	echo $LINE
 
+	#not sure if I need to expose these ports, but it is working
 	#docker run --rm -it --network=host\
 	docker run --rm -it \
 		-p 9000:9000/udp \
@@ -38,9 +57,10 @@ elif [ "$(expr substr $(uname -s) 1 5)" == "Linux" ]; then
 		--name=$NAME \
 		--device=/dev/snd:/dev/snd \
 		--device=/dev/dri:/dev/dri $LINE \
-		-v $(pwd)/catkin_ws:/catkin_ws \
+		-v $CATKIN_WS_DIR:/catkin_ws \
 		-v $(pwd)/tmux:/usr/local/bin/tmux_session\
 		-v /run/user/${USER_UID}/pulse:/run/user/1000/pulse \
+  		--volume /dev/bus/usb/$BUS/$PORT:/dev/bus/usb/$BUS/$PORT \
 		-e PULSE_SERVER=unix:/run/user/1000/pulse/native \
 		$DOCKER_IMAGE_NAME:$BRANCH /bin/bash
 		#-u 1000:1000 \

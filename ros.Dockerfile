@@ -17,6 +17,8 @@ RUN apt-get update && apt-get install \
 	vim \
 	python \
 	ros-noetic-desktop-full \
+	ros-noetic-rosdoc-lite \
+	ros-noetic-moveit \
 	v4l-utils \
 	catkin-lint \
 	iputils-ping \
@@ -26,6 +28,8 @@ RUN apt-get update && apt-get install \
 	libasound2-plugins \
 	libpython-all-dev \
 	libeigen3-dev\
+	libudev-dev\
+	libudev1\
 	tmux \
 	--yes && rm -rf /var/lib/apt/lists/*
 ADD scripts/configure_sound.bash /tmp/conf_alsa.bash
@@ -80,15 +84,19 @@ USER ${uid}
 WORKDIR /catkin_opensim/src
 
 ENV OPENSIMRTDIR=opensimrt_core
-#RUN echo "I use this to make it get stuff from git again"
 
-RUN git clone https://github.com/opensimrt-ros/opensimrt_core.git ./$OPENSIMRTDIR -b slim-devel  && ln -s /srv/data $OPENSIMRTDIR/data # && echo hello 
+#half way into removing those hardcoded paths. still hardcoded, but a bit better
+ADD cmake/Findsimbody.cmake /opt/dependencies
+ADD cmake/FindOpenSim.cmake /opt/dependencies
+
+RUN git clone https://github.com/opensimrt-ros/opensimrt_core.git ./$OPENSIMRTDIR -b slim-devel  && ln -s /srv/data $OPENSIMRTDIR/data  && echo "pulling opensimrt_core again"  
 #RUN git clone https://github.com/frederico-klein/OpenSimRT.git ./opensimrt -b v0.03.1ros --depth 1 && ln -s /srv/data opensimrt/data  
 RUN sed 's@~@/opt@' ./$OPENSIMRTDIR/.github/workflows/env_variables >> ./$OPENSIMRTDIR/env.sh
 
-RUN git clone https://github.com/opensimrt-ros/opensimrt_msgs.git -b devel
+RUN git clone https://github.com/opensimrt-ros/opensimrt_msgs.git -b devel && echo "pulling opensimrt_msgs again"
+#RUN echo "I use this to make it get stuff from git again"
 
-RUN git clone https://github.com/opensimrt-ros/opensimrt_bridge.git -b devel
+RUN git clone https://github.com/opensimrt-ros/opensimrt_bridge.git -b devel && echo "pulling opensimrt_bridge again"
 
 ENV PYTHONPATH=/opt/ros/noetic/lib/python3/dist-packages/:$PYTHONPATH
 
@@ -110,12 +118,17 @@ ENV LD_LIBRARY_PATH=/opt/dependencies/opensim-core/lib/
 
 #RUN git pull && git checkout permissions 
 USER root
+#I dont think this variable is set yet
 WORKDIR /opt/dependencies/opensim-core/lib/python3.6/site-packages/
 RUN python3.8 setup.py install
 WORKDIR /usr/lib/x86_64-linux-gnu
 RUN ln -s libpython3.8.so.1.0 libpython3.6m.so.1.0
 ## fixing bug in view_frames
 RUN sed -i "s/\(subprocess.Popen([^)]*\)/\1,universal_newlines=True/" /opt/ros/noetic/lib/tf/view_frames 
+
+ADD scripts/realsense_install.bash /usr/sbin/
+RUN bash /usr/sbin/realsense_install.bash
+
 USER ${uid}
 RUN echo 'export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/opt/dependencies/opensim-core/lib' >> ~/.bashrc
 
@@ -168,4 +181,5 @@ ADD scripts/entrypoint.sh /bin/entrypoint.sh
 #RUN apt install cowsay -y
 
 RUN rosdep update
+RUN pip3 install timeout_decorator
 ENTRYPOINT [ "entrypoint.sh" ]
