@@ -32,8 +32,6 @@ elif [ "$(expr substr $(uname -s) 1 5)" == "Linux" ]; then
 	echo "You can put the dongle after the android vm has started"
 	scripts/how_to_start_bt_androidx86_vm.py &
 
-	VBoxManage startvm "Android x86"
-
     	xhost +
 	FILES="/dev/video*"
 	LINE=""
@@ -58,6 +56,7 @@ elif [ "$(expr substr $(uname -s) 1 5)" == "Linux" ]; then
 		--device=/dev/snd:/dev/snd \
 		--device=/dev/dri:/dev/dri $LINE \
 		-v $CATKIN_WS_DIR:/catkin_ws \
+		-v Data:/srv/host_data \
 		-v $(pwd)/tmux:/usr/local/bin/tmux_session\
 		-v /run/user/${USER_UID}/pulse:/run/user/1000/pulse \
   		--volume /dev/bus/usb/$BUS/$PORT:/dev/bus/usb/$BUS/$PORT \

@@ -7,11 +7,14 @@
 # @created     : Friday Jan 05, 2024 16:35:06 CET
 #
 
-# dodododododo
 
 import tkinter as tk
 from tkinter import messagebox
- 
+import subprocess
+
+def start_vm():
+        subprocess.run(['VBoxManage','startvm','Android x86'])
+
 def troubleshooting():
     tk.messagebox.showinfo("Troubleshooting tip:", "Find me so we can fix it.") 
 
@@ -70,12 +73,15 @@ def main():
      
     l.pack()
     T.pack()
+    start_vm_ = tk.Button(root, text="Start Android VM", command = start_vm)
+    start_vm_.pack(fill="both",expand=True)
     b1.pack()
     b2.pack()
-     
+
     # Insert The Fact.
     T.insert(tk.END, Fact)
-     
+    
+
     tk.mainloop()
 
 if __name__ == '__main__':
