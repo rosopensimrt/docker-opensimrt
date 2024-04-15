@@ -142,7 +142,7 @@ ADD scripts/build_opensimrt.bash /bin/catkin_build_opensimrt.bash
 
 ADD scripts/build_catkin_ws.bash /bin/catkin_build_ws.bash
 
-RUN echo "source /catkin_opensim/devel/setup.bash" >> ~/.bash_history
+RUN printf "source /catkin_ws/devel/setup.bash\nsource /catkin_opensim/devel/setup.bash" >> ~/.bash_history
 
 RUN /bin/catkin_build_opensimrt.bash
 
