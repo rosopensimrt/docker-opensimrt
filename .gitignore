@@ -1,4 +1,5 @@
 __pycache__
+catkin_*
 catkin_ws/src/*
 catkin_ws/devel/*
 catkin_ws/build/*
