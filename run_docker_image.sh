@@ -32,7 +32,10 @@ elif [ "$(expr substr $(uname -s) 1 5)" == "Linux" ]; then
 	echo "You can put the dongle after the android vm has started"
 	scripts/how_to_start_bt_androidx86_vm.py &
 
-    	xhost +
+	## slightly better alternative, untested:
+	#xhost +
+    	xauth nlist $DISPLAY | sed -e 's/^..../ffff/' | xauth -f /tmp/.docker.xauth nmerge -
+
 	FILES="/dev/video*"
 	LINE=""
 	for f in $FILES
@@ -51,7 +54,7 @@ elif [ "$(expr substr $(uname -s) 1 5)" == "Linux" ]; then
 		-p 10000:10000/udp \
 		-p 9999:9999 \
 		-p 1030:1030/udp \
-		-e DISPLAY=$DISPLAY -v /tmp/.X11-unix:/tmp/.X11-unix \
+		-e DISPLAY=unix$DISPLAY -v /tmp/.X11-unix:/tmp/.X11-unix -v /tmp/.docker.xauth:/tmp/.docker.xauth:rw -e XAUTHORITY=/tmp/.docker.xauth\
 		--name=$NAME \
 		--device=/dev/snd:/dev/snd \
 		--device=/dev/dri:/dev/dri $LINE \

@@ -77,7 +77,7 @@ ARG gid=1000
 #ARG VIDEOGROUP=${VIDEOGROUP}
 #RUN groupadd -g $VIDEOGROUP video
 RUN groupadd -g ${gid} ${group}
-RUN useradd -u ${uid} -g root -G sudo,audio,video,${gid} -s /bin/bash -m ${user} -p123456
+RUN useradd -u ${uid} -g ${gid} -G sudo,audio,video,root -s /bin/bash -m ${user} && echo "${user}:${user}" | chpasswd 
 # Switch to user
 USER ${uid}
 
@@ -164,7 +164,9 @@ EXPOSE 9999
 ADD scripts/bash_git.bash ${HOME_DIR}/.bash_git
 ADD scripts/bashbar.bash  ${HOME_DIR}/.bash_bar
 RUN echo "source ~/.bash_git" >> ~/.bashrc && \
-    echo "source ~/.bash_bar" >> ~/.bashrc
+    echo "source ~/.bash_bar" >> ~/.bashrc && \
+    echo "export EDITOR='nv'" >> ~/.bashrc
+
 
 ADD scripts/create_bashrcs.bash ${HOME_DIR}/.create_bashrcs.sh
 RUN bash ~/.create_bashrcs.sh
@@ -181,5 +183,5 @@ ADD scripts/entrypoint.sh /bin/entrypoint.sh
 #RUN apt install cowsay -y
 
 RUN rosdep update
-RUN pip3 install timeout_decorator
+RUN pip3 install timeout_decorator libtmux
 ENTRYPOINT [ "entrypoint.sh" ]
