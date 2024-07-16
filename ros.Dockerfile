@@ -4,6 +4,7 @@ ENV DEBIAN_FRONTEND=noninteractive
 
 RUN apt-get update && apt-get install \
 	build-essential \
+	curl \
 	freeglut3-dev \
 	git \
 	libxi-dev \
@@ -81,7 +82,10 @@ RUN useradd -u ${uid} -g ${gid} -G sudo,audio,video,root -s /bin/bash -m ${user}
 # Switch to user
 USER ${uid}
 
+ENV XDG_RUNTIME_DIR=/run/user/"${uid}"
+
 WORKDIR /catkin_opensim/src
+
 
 ENV OPENSIMRTDIR=opensimrt_core
 
@@ -129,6 +133,8 @@ RUN sed -i "s/\(subprocess.Popen([^)]*\)/\1,universal_newlines=True/" /opt/ros/n
 ADD scripts/realsense_install.bash /usr/sbin/
 RUN bash /usr/sbin/realsense_install.bash
 
+RUN mkdir -p -m 0700 /var/run/dbus && chown ${gid}:${uid} /var/run/dbus
+
 USER ${uid}
 RUN echo 'export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/opt/dependencies/opensim-core/lib' >> ~/.bashrc
 
@@ -156,7 +162,7 @@ EXPOSE 10000/udp
 EXPOSE 8001/udp
 EXPOSE 8000/udp
 
-expose 7000/tcp
+EXPOSE 7000/tcp
 #port for insoles
 EXPOSE 9999
 
@@ -184,4 +190,6 @@ ADD scripts/entrypoint.sh /bin/entrypoint.sh
 
 RUN rosdep update
 RUN pip3 install timeout_decorator libtmux
+
+
 ENTRYPOINT [ "entrypoint.sh" ]
