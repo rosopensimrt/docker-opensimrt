@@ -2,3 +2,6 @@
 	path = catkin_devel/src/ros_biomech
 	url = git@gits-15.sys.kth.se:ros-biomech/ros_biomech.git
 	branch = devel-all
+[submodule "Data/refdata"]
+	path = Data/refdata
+	url = git@github.com:frederico-klein/refdata.git

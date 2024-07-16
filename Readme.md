@@ -6,6 +6,16 @@ While it was meant to be used on Linux, it may be possible to use other Docker f
 
 To use it you need to have [docker installed](https://docs.docker.com/get-docker/).
 
+## Newest instructions:
+
+Clone it like this to get everything:
+
+    git clone --recursive -b devel-all git@github.com:frederico-klein/docker-opensimrt opensimrt
+
+
+#### Everything below here is old. needs to be reviewed and updated.
+
+
 Build with :
 
     $ bash build_docker_image.sh
