@@ -22,6 +22,25 @@ The code was devided into 2 different workspaces to reduce compilation times so 
 
 # First time use:
 
+We are now using a big repo with everything for the ease of it. 
+
+create a directory called 
+
+    mkdir -p catkin_devel/src
+
+do a 
+
+    git clone git@gits-15.sys.kth.se:frekle/ros_biomech.git
+
+then do:
+
+    git submodule update --init --recursive
+
+## Troubleshooting:
+	
+I've done some shady things with the submodules here, so you might need to change .gitmodules and the .git/config file to put the correct reference for the tmux_session module. This was an old idea and it is quite complicated, so it will be phased out at some point (if I have time), but right now it is necessary. 
+
+
 Run the docker image loader script: 
 
     $ bash run_docker_image.sh

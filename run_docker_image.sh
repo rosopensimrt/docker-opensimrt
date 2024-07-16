@@ -23,7 +23,7 @@ elif [ "$(expr substr $(uname -s) 1 5)" == "Linux" ]; then
     # Do something under GNU/Linux platform
 	#let's also run the vm for the android device
 	# it doesnt seem to work if the bt dongle is already plugged in, so let's check for that
-	VENDOR_DEV=0bda:8771
+	VENDOR_DEV=?????0bda:8771
 	BT_INSERTED=$(lsusb -d $VENDOR_DEV)
 	if [[ $BT_INSERTED ]]; then
 		echo "Remove BT device before starting VM..."
