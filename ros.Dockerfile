@@ -189,7 +189,7 @@ ADD scripts/entrypoint.sh /bin/entrypoint.sh
 #RUN apt install cowsay -y
 
 RUN rosdep update
-RUN pip3 install timeout_decorator libtmux
+RUN pip3 install timeout_decorator libtmux pandas
 
 
 ENTRYPOINT [ "entrypoint.sh" ]
