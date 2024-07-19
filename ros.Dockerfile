@@ -183,13 +183,18 @@ ADD scripts/catkin.sh /bin/first_time_catkin_builder.sh
 ## gets latest local environment
 ADD scripts/set_local_branches.bash /bin/set_local_branches.bash
 #ADD scripts/get_latest_local_branches.bash /bin/get_latest_local_branches.bash
-WORKDIR /catkin_ws
 ADD scripts/entrypoint.sh /bin/entrypoint.sh 
 #RUN apt remove python -y
 #RUN apt install cowsay -y
 
 RUN rosdep update
-RUN pip3 install timeout_decorator libtmux
+RUN pip3 install timeout_decorator libtmux sympy tqdm
 
+WORKDIR ~
+RUN git clone https://github.com/mrocklin/multipolyfit.git \
+	&& cd multipolyfit \
+	&& pip3 install -e .
+
+WORKDIR /catkin_ws
 
 ENTRYPOINT [ "entrypoint.sh" ]
