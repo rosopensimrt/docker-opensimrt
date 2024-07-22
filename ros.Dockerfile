@@ -93,8 +93,7 @@ ENV OPENSIMRTDIR=opensimrt_core
 ADD cmake/Findsimbody.cmake /opt/dependencies
 ADD cmake/FindOpenSim.cmake /opt/dependencies
 
-RUN git clone https://github.com/opensimrt-ros/opensimrt_core.git ./$OPENSIMRTDIR -b slim-devel  && ln -s /srv/data $OPENSIMRTDIR/data  && echo "pulling opensimrt_core again"  
-#RUN git clone https://github.com/frederico-klein/OpenSimRT.git ./opensimrt -b v0.03.1ros --depth 1 && ln -s /srv/data opensimrt/data  
+RUN git clone https://github.com/opensimrt-ros/opensimrt_core.git ./$OPENSIMRTDIR -b slim-devel  && ln -s /srv/data $OPENSIMRTDIR/data  #&& echo "pulling opensimrt_core again"  
 RUN sed 's@~@/opt@' ./$OPENSIMRTDIR/.github/workflows/env_variables >> ./$OPENSIMRTDIR/env.sh
 
 RUN git clone https://github.com/opensimrt-ros/opensimrt_msgs.git -b devel && echo "pulling opensimrt_msgs again"
@@ -171,7 +170,8 @@ ADD scripts/bash_git.bash ${HOME_DIR}/.bash_git
 ADD scripts/bashbar.bash  ${HOME_DIR}/.bash_bar
 RUN echo "source ~/.bash_git" >> ~/.bashrc && \
     echo "source ~/.bash_bar" >> ~/.bashrc && \
-    echo "export EDITOR='nv'" >> ~/.bashrc
+    echo "export EDITOR='nv'" >> ~/.bashrc && \
+    echo 'export PATH=${PATH}:/catkin_ws/src/tmux_launch/scripts/' >> ~/.bashrc
 
 
 ADD scripts/create_bashrcs.bash ${HOME_DIR}/.create_bashrcs.sh
@@ -189,7 +189,7 @@ ADD scripts/entrypoint.sh /bin/entrypoint.sh
 #RUN apt install cowsay -y
 
 RUN rosdep update
-RUN pip3 install timeout_decorator libtmux pandas
+RUN pip3 install timeout_decorator libtmux
 
 
 ENTRYPOINT [ "entrypoint.sh" ]
