@@ -64,7 +64,7 @@ elif [ "$(expr substr $(uname -s) 1 5)" == "Linux" ]; then
 		-v /run/user/${USER_UID}/pulse:/run/user/1000/pulse \
   		--volume /dev/bus/usb/$BUS/$PORT:/dev/bus/usb/$BUS/$PORT \
 		-e PULSE_SERVER=unix:/run/user/1000/pulse/native \
-		$DOCKER_IMAGE_NAME:$BRANCH /bin/bash
+		$DOCKER_IMAGE_NAME:$BRANCH /bin/bash -l
 		#-u 1000:1000 \
 elif [ "$(expr substr $(uname -s) 1 10)" == "MINGW32_NT" ]; then
     # Do something under 32 bits Windows NT platform

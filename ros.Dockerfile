@@ -80,6 +80,7 @@ ARG gid=1000
 RUN groupadd -g ${gid} ${group}
 
 ## opensimrtuser)
+## generate other password with $ openssl passwd -6 "somepassword"
 RUN useradd -u ${uid} -g ${gid} -G sudo,audio,video,root -s /bin/bash -m ${user} -p '$6$WsqPSjlIKm37devi$U3hwXWYilUOFYRH8EE7FoStlfCfeK0dJY3.fdEWKFJkDGMg6p9YQIsycpcv7OM4SFSdz3D0sfEGyrY8reNSgu1'
 # Switch to user
 USER ${uid}
