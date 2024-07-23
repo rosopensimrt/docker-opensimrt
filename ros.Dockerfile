@@ -1,4 +1,4 @@
-FROM ros:noetic-ros-base
+FROM ros:noetic-ros-base AS build-env
 
 ENV DEBIAN_FRONTEND=noninteractive
 
@@ -53,7 +53,20 @@ RUN git clone https://github.com/mysablehats/OpenSimRT_data.git /srv/data
 
 ADD scripts/ximu.bash /bin
 RUN /bin/ximu.bash
-#this is a volume now so we can't build it at docker build time
+
+#FROM ros:noetic-ros-base AS build-env2
+
+#COPY --from=build-env /srv/data /srv/data
+#COPY --from=build-env /usr /usr
+#COPY --from=build-env /lib /lib
+#COPY --from=build-env /etc /etc
+#COPY --from=build-env /bin /bin
+#COPY --from=build-env /sbin /sbin
+#COPY --from=build-env /opt /opt
+#COPY --from=build-env /ximu3/libximu3.a /ximu3/libximu3.a
+
+
+##this is a volume now so we can't build it at docker build time
 #RUN bash catkin_build_ws.bash
 
 ## dynamic reconfigure has problems with newer versions of pyyaml
@@ -193,6 +206,9 @@ ADD scripts/entrypoint.sh /bin/entrypoint.sh
 
 RUN rosdep update
 RUN pip3 install timeout_decorator libtmux
+
+ADD scripts/banners /etc/banners
+ADD scripts/banners/welcome.sh /etc/profile.d/welcome.sh
 
 
 ENTRYPOINT [ "entrypoint.sh" ]
