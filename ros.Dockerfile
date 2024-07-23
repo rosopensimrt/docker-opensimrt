@@ -78,7 +78,9 @@ ARG gid=1000
 #ARG VIDEOGROUP=${VIDEOGROUP}
 #RUN groupadd -g $VIDEOGROUP video
 RUN groupadd -g ${gid} ${group}
-RUN useradd -u ${uid} -g ${gid} -G sudo,audio,video,root -s /bin/bash -m ${user} && echo "${user}:${user}" | chpasswd 
+
+## opensimrtuser)
+RUN useradd -u ${uid} -g ${gid} -G sudo,audio,video,root -s /bin/bash -m ${user} -p '$6$WsqPSjlIKm37devi$U3hwXWYilUOFYRH8EE7FoStlfCfeK0dJY3.fdEWKFJkDGMg6p9YQIsycpcv7OM4SFSdz3D0sfEGyrY8reNSgu1'
 # Switch to user
 USER ${uid}
 
