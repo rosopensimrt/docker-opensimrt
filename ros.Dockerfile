@@ -96,7 +96,6 @@ RUN groupadd -g ${gid} ${group}
 ## generate other password with $ openssl passwd -6 "somepassword"
 RUN useradd -u ${uid} -g ${gid} -G sudo,audio,video,root -s /bin/bash -m ${user} -p '$6$WsqPSjlIKm37devi$U3hwXWYilUOFYRH8EE7FoStlfCfeK0dJY3.fdEWKFJkDGMg6p9YQIsycpcv7OM4SFSdz3D0sfEGyrY8reNSgu1'
 # Switch to user
-USER ${uid}
 
 ENV XDG_RUNTIME_DIR=/run/user/"${uid}"
 
@@ -109,8 +108,8 @@ ENV OPENSIMRTDIR=opensimrt_core
 ADD cmake/Findsimbody.cmake /opt/dependencies
 ADD cmake/FindOpenSim.cmake /opt/dependencies
 
-RUN git clone https://github.com/opensimrt-ros/opensimrt_core.git ./$OPENSIMRTDIR -b slim-devel  && ln -s /srv/data $OPENSIMRTDIR/data  #&& echo "pulling opensimrt_core again"  
-RUN sed 's@~@/opt@' ./$OPENSIMRTDIR/.github/workflows/env_variables >> ./$OPENSIMRTDIR/env.sh
+RUN git clone https://github.com/opensimrt-ros/opensimrt_core.git ./$OPENSIMRTDIR -b slim-devel  && ln -s /srv/data $OPENSIMRTDIR/data  && echo "pulling opensimrt_core again"  
+RUN sed 's@~@/opt@' ./$OPENSIMRTDIR/.github/workflows/env_variables >> /etc/profile.d/opensim_envs.sh
 
 RUN git clone https://github.com/opensimrt-ros/opensimrt_msgs.git -b devel && echo "pulling opensimrt_msgs again"
 #RUN echo "I use this to make it get stuff from git again"
@@ -136,7 +135,6 @@ ENV LD_LIBRARY_PATH=/opt/dependencies/opensim-core/lib/
 #WORKDIR /catkin_opensim/src/opensimrt
 
 #RUN git pull && git checkout permissions 
-USER root
 #I dont think this variable is set yet
 WORKDIR /opt/dependencies/opensim-core/lib/python3.6/site-packages/
 RUN python3.8 setup.py install
@@ -148,7 +146,7 @@ RUN sed -i "s/\(subprocess.Popen([^)]*\)/\1,universal_newlines=True/" /opt/ros/n
 ADD scripts/realsense_install.bash /usr/sbin/
 RUN bash /usr/sbin/realsense_install.bash
 
-RUN mkdir -p -m 0700 /var/run/dbus && chown ${gid}:${uid} /var/run/dbus
+RUN mkdir -p -m 0700 /var/run/dbus && chown ${uid}:${gid} /var/run/dbus && chown ${uid}:${gid} -R /catkin_opensim
 
 USER ${uid}
 RUN echo 'export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/opt/dependencies/opensim-core/lib' >> ~/.bashrc
@@ -159,13 +157,18 @@ RUN ~/vim_configure.bash
 
 ADD tmux/.tmux.conf ${HOME_DIR}/
 
-ADD scripts/build_opensimrt.bash /bin/catkin_build_opensimrt.bash
+#ADD scripts/build_opensimrt.bash /bin/catkin_build_opensimrt.bash
 
-ADD scripts/build_catkin_ws.bash /bin/catkin_build_ws.bash
+#ADD scripts/build_catkin_ws.bash /bin/catkin_build_ws.bash
 
 RUN printf "source /catkin_ws/devel/setup.bash\nsource /catkin_opensim/devel/setup.bash" >> ~/.bash_history
 
-RUN /bin/catkin_build_opensimrt.bash
+###############################################################################################################################################################################################################################################
+
+WORKDIR /catkin_opensim
+RUN . /opt/ros/noetic/setup.sh && . /etc/profile.d/opensim_envs.sh && catkin_make ## it's not a session, so it wont load the exports...
+
+WORKDIR /catkin_opensim/src
 
 #EXPOSE 8080/udp
 #EXPOSE 8080/tcp
@@ -206,6 +209,7 @@ ADD scripts/entrypoint.sh /bin/entrypoint.sh
 
 RUN rosdep update
 RUN pip3 install timeout_decorator libtmux
+
 
 ADD scripts/banners /etc/banners
 ADD scripts/banners/welcome.sh /etc/profile.d/welcome.sh
