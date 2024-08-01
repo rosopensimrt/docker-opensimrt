@@ -108,7 +108,7 @@ ENV OPENSIMRTDIR=opensimrt_core
 ADD cmake/Findsimbody.cmake /opt/dependencies
 ADD cmake/FindOpenSim.cmake /opt/dependencies
 
-RUN git clone https://github.com/opensimrt-ros/opensimrt_core.git ./$OPENSIMRTDIR -b slim-devel  && ln -s /srv/data $OPENSIMRTDIR/data  && echo "pulling opensimrt_core again"  
+RUN git clone https://github.com/opensimrt-ros/opensimrt_core.git ./$OPENSIMRTDIR -b feature/epoch-time-saving  && ln -s /srv/data $OPENSIMRTDIR/data  && echo "pulling opensimrt_core again"  
 RUN sed 's@~@/opt@' ./$OPENSIMRTDIR/.github/workflows/env_variables >> /etc/profile.d/opensim_envs.sh
 
 RUN git clone https://github.com/opensimrt-ros/opensimrt_msgs.git -b devel && echo "pulling opensimrt_msgs again"
