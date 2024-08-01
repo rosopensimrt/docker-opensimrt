@@ -1,7 +1,9 @@
 #!/usr/bin/env bash
 set -e
 cd /catkin_opensim
-source src/$OPENSIMRTDIR/env.sh 
+. /etc/profile.d/opensim_envs.sh
+
+#source src/$OPENSIMRTDIR/env.sh 
 . /opt/ros/noetic/setup.sh
 catkin_make  \
             -DCMAKE_BUILD_TYPE=Release \

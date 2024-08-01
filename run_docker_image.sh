@@ -4,7 +4,7 @@ mkdir -p catkin_ws/devel
 mkdir -p catkin_ws/build
 NAME=${1:-opensimrt_ros_}
 CATKIN_WS_DIR=${2:-$(pwd)/catkin_ws}
-DOCKER_IMAGE_NAME=mysablehats/opensim-rt
+DOCKER_IMAGE_NAME=rosopensimrt/opensim-rt
 #DOCKER_IMAGE_NAME=rosopensimrt/ros
 echo -en "\e]0;MAIN WINDOW DO NOT CLOSE!!!! [$CATKIN_WS_DIR]\a"
 #!/bin/bash

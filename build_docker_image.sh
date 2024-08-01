@@ -1,5 +1,5 @@
 BRANCH=$(git branch --show-current )
-USERNAME=mysablehats
+USERNAME=rosopensimrt
 #VIDEOGROUP=$(getent group video | awk -F: '{print $3}')
 if [ "$(uname)" == "Darwin" ]; then
     # Do something under Mac OS X platform        

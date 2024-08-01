@@ -157,16 +157,17 @@ RUN ~/vim_configure.bash
 
 ADD tmux/.tmux.conf ${HOME_DIR}/
 
-#ADD scripts/build_opensimrt.bash /bin/catkin_build_opensimrt.bash
+ADD scripts/build_opensimrt.bash /bin/catkin_build_opensimrt.bash
 
-#ADD scripts/build_catkin_ws.bash /bin/catkin_build_ws.bash
+ADD scripts/build_catkin_ws.bash /bin/catkin_build_ws.bash
 
 RUN printf "source /catkin_ws/devel/setup.bash\nsource /catkin_opensim/devel/setup.bash" >> ~/.bash_history
 
 ###############################################################################################################################################################################################################################################
 
 WORKDIR /catkin_opensim
-RUN . /opt/ros/noetic/setup.sh && . /etc/profile.d/opensim_envs.sh && catkin_make ## it's not a session, so it wont load the exports...
+#RUN . /opt/ros/noetic/setup.sh && . /etc/profile.d/opensim_envs.sh && catkin_make ## it's not a session, so it wont load the exports...
+RUN /bin/catkin_build_opensimrt.bash
 
 WORKDIR /catkin_opensim/src
 
