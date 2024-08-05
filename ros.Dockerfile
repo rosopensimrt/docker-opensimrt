@@ -209,8 +209,14 @@ ADD scripts/entrypoint.sh /bin/entrypoint.sh
 #RUN apt install cowsay -y
 
 RUN rosdep update
-RUN pip3 install timeout_decorator libtmux
+RUN pip3 install timeout_decorator libtmux sympy tqdm pandas
 
+WORKDIR ${HOME_DIR}
+RUN git clone https://github.com/mrocklin/multipolyfit.git \
+	&& cd multipolyfit \
+	&& pip3 install -e .
+
+WORKDIR /catkin_ws
 
 ADD scripts/banners /etc/banners
 ADD scripts/banners/welcome.sh /etc/profile.d/welcome.sh
