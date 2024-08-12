@@ -21,6 +21,7 @@ if [ "$(uname)" == "Darwin" ]; then
 		$DOCKER_IMAGE_NAME:$BRANCH
 elif [ "$(expr substr $(uname -s) 1 5)" == "Linux" ]; then
     # Do something under GNU/Linux platform
+	USER_UID=$(id -u)
 	#let's also run the vm for the android device
 	# it doesnt seem to work if the bt dongle is already plugged in, so let's check for that
 	VENDOR_DEV=?????0bda:8771
