@@ -1,12 +1,9 @@
 #BRANCH=latest
 BRANCH=$(git branch --show-current )
-mkdir -p catkin_ws/devel
-mkdir -p catkin_ws/build
 NAME=${1:-opensimrt_ros_}
-CATKIN_WS_DIR=${2:-$(pwd)/catkin_ws}
 DOCKER_IMAGE_NAME=rosopensimrt/opensim-rt
 #DOCKER_IMAGE_NAME=rosopensimrt/ros
-echo -en "\e]0;MAIN WINDOW DO NOT CLOSE!!!! [$CATKIN_WS_DIR]\a"
+echo -en "\e]0;MAIN WINDOW DO NOT CLOSE!!!! [$BRANCH]\a"
 #!/bin/bash
 
 BUS=$(lsusb | grep 8086 | cut -d " " -f 2)
@@ -30,10 +27,10 @@ elif [ "$(expr substr $(uname -s) 1 5)" == "Linux" ]; then
 		echo "Remove BT device before starting VM..."
 		exit 0
 	fi
-	echo "You can put the dongle after the android vm has started"
-	scripts/how_to_start_bt_androidx86_vm.py &
+	#echo "You can put the dongle after the android vm has started"
+	#scripts/how_to_start_bt_androidx86_vm.py &
 
-	## slightly better alternative, untested:
+	## slightly better alternative to xhost +
 	#xhost +
     	xauth nlist $DISPLAY | sed -e 's/^..../ffff/' | xauth -f /tmp/.docker.xauth nmerge -
 
@@ -59,7 +56,6 @@ elif [ "$(expr substr $(uname -s) 1 5)" == "Linux" ]; then
 		--name=$NAME \
 		--device=/dev/snd:/dev/snd \
 		--device=/dev/dri:/dev/dri $LINE \
-		-v $CATKIN_WS_DIR:/catkin_ws \
 		-v $(pwd)/Data:/srv/host_data \
 		-v $(pwd)/tmux:/usr/local/bin/tmux_session\
 		-v /run/user/${USER_UID}/pulse:/run/user/1000/pulse \

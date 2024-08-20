@@ -216,10 +216,12 @@ RUN git clone https://github.com/mrocklin/multipolyfit.git \
 	&& cd multipolyfit \
 	&& pip3 install -e .
 
-WORKDIR /catkin_ws
+WORKDIR /catkin_ws/src
 
 ADD scripts/banners /etc/banners
 ADD scripts/banners/welcome.sh /etc/profile.d/welcome.sh
 
+RUN git clone --recursive https://github.com/opensimrt-ros/ros-biomech.git && /bin/catkin_build_ws.bash
+WORKDIR /catkin_ws
 
 ENTRYPOINT [ "entrypoint.sh" ]
