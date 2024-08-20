@@ -20,6 +20,7 @@ RUN apt-get update && apt-get install \
 	ros-noetic-desktop-full \
 	ros-noetic-rosdoc-lite \
 	ros-noetic-moveit \
+	ros-noetic-rosbridge-server \
 	v4l-utils \
 	catkin-lint \
 	iputils-ping \
