@@ -5,6 +5,3 @@
 [submodule "Data/refdata"]
 	path = Data/refdata
 	url = https://github.com/opensimrt-ros/refdata.git
-[submodule "catkin_devel/src/tmux_launch"]
-	path = catkin_devel/src/tmux_launch
-	url = https://github.com/frederico-klein/tmux_launch.git
