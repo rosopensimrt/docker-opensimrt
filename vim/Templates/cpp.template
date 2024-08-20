@@ -1,0 +1,17 @@
+/**
+ * @author      : {{NAME}} ({{EMAIL}})
+ * @file        : {{FILE}}.cpp
+ * @date        : {{TIMESTAMP}}
+ */
+
+#include "{{FILE}}.h"
+
+{{CLASS}}::{{CLASS}}()
+{
+    {{CURSOR}}
+}
+
+{{CLASS}}::~{{CLASS}}()
+{
+}
+
