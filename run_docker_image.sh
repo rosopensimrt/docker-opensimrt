@@ -1,7 +1,7 @@
 #!/bin/bash
 #BRANCH=latest
 BRANCH=$(git branch --show-current )
-AME=${1:-opensimrt_ros_}
+NAME=${1:-opensimrt_ros_}
 CATKIN_WS_DIR=${2:-$(pwd)/catkin_ws}
 mkdir -p $CATKIN_WS_DIR/devel
 mkdir -p $CATKIN_WS_DIR/build
