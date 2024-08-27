@@ -174,7 +174,7 @@ RUN /bin/catkin_build_opensimrt.bash
 
 WORKDIR /catkin_opensim/src
 
-FROM stage3 AS FINAL
+FROM stage3 AS final
 
 #EXPOSE 8080/udp
 #EXPOSE 8080/tcp
