@@ -6,8 +6,8 @@ on:
      - main
      - devel-all
      - 'releases/**'
-       ##this was triggering all the time
-       #- 'feature/**'
+       ##this was triggering all the time, but it needs to be the last thing to be removed
+     - 'feature/**'
 
 jobs:
   build:
