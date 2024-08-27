@@ -14,7 +14,5 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    # let's just see if this works
-    #- uses: actions/checkout@v3
     - name: Build the first stage Docker image
-      run: docker build -f ros.Dockerfile -t rosopensimrt/opensim-rt:$(date +%s) --target stage1 .
+      run: echo $pwd && ls -la && docker build -f ros.Dockerfile -t rosopensimrt/opensim-rt:$(date +%s) --target stage1 .
