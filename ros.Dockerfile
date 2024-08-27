@@ -1,4 +1,4 @@
-FROM ros:noetic-ros-base AS build-env
+FROM ros:noetic-ros-base AS stage1
 
 ENV DEBIAN_FRONTEND=noninteractive
 
@@ -51,6 +51,8 @@ RUN  wget https://sourceforge.net/projects/dependencies/files/vicon/ViconDataStr
 #RUN echo "I use this to make it get stuff from git again"
 
 RUN git clone https://github.com/mysablehats/OpenSimRT_data.git /srv/data
+
+FROM stage1 AS stage2
 
 ADD scripts/ximu.bash /bin
 RUN /bin/ximu.bash
@@ -165,12 +167,14 @@ ADD scripts/build_catkin_ws.bash /bin/catkin_build_ws.bash
 RUN printf "source /catkin_ws/devel/setup.bash\nsource /catkin_opensim/devel/setup.bash" >> ~/.bash_history
 
 ###############################################################################################################################################################################################################################################
-
+FROM stage2 AS stage3
 WORKDIR /catkin_opensim
 #RUN . /opt/ros/noetic/setup.sh && . /etc/profile.d/opensim_envs.sh && catkin_make ## it's not a session, so it wont load the exports...
 RUN /bin/catkin_build_opensimrt.bash
 
 WORKDIR /catkin_opensim/src
+
+FROM stage3 AS FINAL
 
 #EXPOSE 8080/udp
 #EXPOSE 8080/tcp

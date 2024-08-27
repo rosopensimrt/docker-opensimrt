@@ -1,12 +1,17 @@
 #!/bin/bash
 #BRANCH=latest
-BRANCH=$(git branch --show-current )
+BRANCH_RAW=$(git branch --show-current )
+## sanitize branch name
+sanitize_tag() {
+    echo "$1" | sed -e 's/[^a-zA-Z0-9._-]/_/g' | tr '[:upper:]' '[:lower:]' | sed -e 's/^[-._]//g' -e 's/[-._]$//g'
+}
+BRANCH=$(sanitize_tag "$BRANCH_RAW")
 NAME=${1:-opensimrt_ros_}
 CATKIN_WS_DIR=${2:-$(pwd)/catkin_ws}
 mkdir -p $CATKIN_WS_DIR/devel
 mkdir -p $CATKIN_WS_DIR/build
-#DOCKER_IMAGE_NAME=rosopensimrt/opensim-rt:$BRANCH
-DOCKER_IMAGE_NAME=rosopensimrt/opensim-rt:devel-all
+DOCKER_IMAGE_NAME=rosopensimrt/opensim-rt:$BRANCH
+#DOCKER_IMAGE_NAME=rosopensimrt/opensim-rt:devel-all
 echo -en "\e]0;MAIN WINDOW DO NOT CLOSE!!!! [$CATKIN_WS_DIR] $BRANCH\a"
 
 #IIRC this is to share the realsense camera

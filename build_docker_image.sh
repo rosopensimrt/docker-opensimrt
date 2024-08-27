@@ -1,4 +1,9 @@
-BRANCH=$(git branch --show-current )
+BRANCH_RAW=$(git branch --show-current )
+## sanitize branch name
+sanitize_tag() {
+    echo "$1" | sed -e 's/[^a-zA-Z0-9._-]/_/g' | tr '[:upper:]' '[:lower:]' | sed -e 's/^[-._]//g' -e 's/[-._]$//g'
+}
+BRANCH=$(sanitize_tag "$BRANCH_RAW")
 USERNAME=rosopensimrt
 #VIDEOGROUP=$(getent group video | awk -F: '{print $3}')
 if [ "$(uname)" == "Darwin" ]; then
@@ -18,6 +23,9 @@ elif [ "$(expr substr $(uname -s) 1 5)" == "Linux" ]; then
 		exit
 	fi
 	#DOCKER_BUILDKIT=1 docker build . -f ros.Dockerfile --build-arg VIDEOGROUP=${VIDEOGROUP} --progress=tty -t ${USERNAME}/opensim-rt:$BRANCH
+	#DOCKER_BUILDKIT=1 docker build . -f Dockerfile.first --progress=tty -t opensim-rt1 --build-arg user=$USER --build-arg group=$(id -g -n) --build-arg uid=$(id -u) --build-arg gid=$(id -g) $@
+	#DOCKER_BUILDKIT=1 docker build . -f Dockerfile.second --progress=tty -t opensim-rt2 --build-arg user=$USER --build-arg group=$(id -g -n) --build-arg uid=$(id -u) --build-arg gid=$(id -g) $@
+	#DOCKER_BUILDKIT=1 docker build . -f Dockerfile.third --progress=tty -t opensim-rt3 --build-arg user=$USER --build-arg group=$(id -g -n) --build-arg uid=$(id -u) --build-arg gid=$(id -g) $@
 	DOCKER_BUILDKIT=1 docker build . -f ros.Dockerfile --progress=tty -t ${USERNAME}/opensim-rt:$BRANCH --build-arg user=$USER --build-arg group=$(id -g -n) --build-arg uid=$(id -u) --build-arg gid=$(id -g) $@
 
 elif [ "$(expr substr $(uname -s) 1 10)" == "MINGW32_NT" ]; then
