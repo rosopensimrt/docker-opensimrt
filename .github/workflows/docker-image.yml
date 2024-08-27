@@ -11,12 +11,63 @@ jobs:
   build:
     runs-on: ubuntu-latest
 
-    steps:    
+    steps:
     - name: Check out the repository
       uses: actions/checkout@v3
 
-    - name: Display working directory contents
-      run: echo $(pwd) && ls -la 
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v2
 
-    - name: Build the first stage Docker image
-      run: echo $(pwd) && ls -la && docker build -f ros.Dockerfile -t rosopensimrt/opensim-rt:$(date +%s) --target stage1 .
+    - name: Cache Docker layers
+      uses: actions/cache@v3
+      with:
+        path: /tmp/.buildx-cache
+        key: ${{ runner.os }}-buildx-${{ github.sha }}
+        restore-keys: |
+          ${{ runner.os }}-buildx-
+
+    - name: Build stage 1 Docker image with cache
+      run: |
+        docker buildx build \
+          --file ./ros.Dockerfile \
+          --target stage1 \
+          --cache-from=type=local,src=/tmp/.buildx-cache \
+          --cache-to=type=local,dest=/tmp/.buildx-cache-new,mode=max \
+          --tag rosopensimrt/opensim-rt:stage1-$(date +%s) \
+          --push .
+
+    - name: Build stage 2 Docker image with cache
+      run: |
+        docker buildx build \
+          --file ./ros.Dockerfile \
+          --target stage2 \
+          --cache-from=type=local,src=/tmp/.buildx-cache \
+          --cache-to=type=local,dest=/tmp/.buildx-cache-new,mode=max \
+          --tag rosopensimrt/opensim-rt:stage2-$(date +%s) \
+          --push .
+
+    - name: Build stage 3 Docker image with cache
+      run: |
+        docker buildx build \
+          --file ./ros.Dockerfile \
+          --target stage2 \
+          --cache-from=type=local,src=/tmp/.buildx-cache \
+          --cache-to=type=local,dest=/tmp/.buildx-cache-new,mode=max \
+          --tag rosopensimrt/opensim-rt:stage2-$(date +%s) \
+          --push .
+
+    - name: Build final stage Docker image with cache
+      run: |
+        docker buildx build \
+          --file ./ros.Dockerfile \
+          --target final \
+          --cache-from=type=local,src=/tmp/.buildx-cache \
+          --cache-to=type=local,dest=/tmp/.buildx-cache-new,mode=max \
+          --tag rosopensimrt/opensim-rt:latest-$(date +%s) \
+          --push .
+
+    - name: Update Docker cache
+      if: always()
+      run: |
+        rm -rf /tmp/.buildx-cache && mv /tmp/.buildx-cache-new /tmp/.buildx-cache
+
