@@ -2,9 +2,10 @@ name: Docker Image CI
 
 on:
   push:
-    branches: [ "ros-devel-insoles" , "ros" ]
-  pull_request:
-    branches: [ "ros" ]
+    branches: 
+     - devel-all
+     - 'releases/**'
+     - 'feature/**'
 
 jobs:
 
@@ -13,6 +14,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v3
-    - name: Build the Docker image
-      run: docker build . -f ros.Dockerfile -t rosopensimrt/opensim-rt:$(date +%s)
+    # let's just see if this works
+    #- uses: actions/checkout@v3
+    - name: Build the first stage Docker image
+      run: docker build -f ros.Dockerfile -t rosopensimrt/opensim-rt:$(date +%s) --target stage1 .
