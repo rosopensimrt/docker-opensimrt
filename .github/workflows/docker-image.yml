@@ -8,11 +8,15 @@ on:
      - 'feature/**'
 
 jobs:
-
   build:
-
     runs-on: ubuntu-latest
 
-    steps:
+    steps:    
+    - name: Check out the repository
+      uses: actions/checkout@v3
+
+    - name: Display working directory contents
+      run: echo $(pwd) && ls -la 
+
     - name: Build the first stage Docker image
       run: echo $(pwd) && ls -la && docker build -f ros.Dockerfile -t rosopensimrt/opensim-rt:$(date +%s) --target stage1 .
