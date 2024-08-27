@@ -38,6 +38,10 @@ jobs:
         username: ${{ secrets.DOCKER_USERNAME }}
         password: ${{ secrets.DOCKER_PASSWORD }}
     
+    - name: Set BRANCH environment variable
+      run: echo "BRANCH=$(echo '${{ github.ref_name }}' | sed -e 's/[^a-zA-Z0-9._-]/_/g' | tr '[:upper:]' '[:lower:]' | sed -e 's/^[-._]//g' -e 's/[-._]$//g')" >> $GITHUB_ENV
+
+
     - name: Build stage 1 Docker image with cache
       run: |
         docker buildx build \
