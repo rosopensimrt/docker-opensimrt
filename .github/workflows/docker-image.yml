@@ -15,4 +15,4 @@ jobs:
 
     steps:
     - name: Build the first stage Docker image
-      run: echo $pwd && ls -la && docker build -f ros.Dockerfile -t rosopensimrt/opensim-rt:$(date +%s) --target stage1 .
+      run: echo $(pwd) && ls -la && docker build -f ros.Dockerfile -t rosopensimrt/opensim-rt:$(date +%s) --target stage1 .
