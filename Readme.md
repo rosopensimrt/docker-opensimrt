@@ -1,5 +1,7 @@
 # docker opensimrt
 
+![Docker Build Status](https://github.com/opensimrt-ros/docker-opensimrt/actions/workflows/docker-image.yml/badge.svg)
+
 This repository contains scripts for building and launching OpenSimRT with a ROS interface. It was based on the [CI yaml from OpenSimRT](https://github.com/mitkof6/OpenSimRT). 
 
 While it was meant to be used on Linux, it may be possible to use other Docker for Windows or Mac (see below).
