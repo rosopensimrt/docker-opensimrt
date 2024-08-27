@@ -7,7 +7,7 @@ on:
      - devel-all
      - 'releases/**'
        ##this was triggering all the time, but it needs to be the last thing to be removed
-     - 'feature/**'
+       #- 'feature/**'
 
 jobs:
   build:
@@ -15,7 +15,7 @@ jobs:
     
     env:
       BRANCH: $(echo "${{ github.ref_name }}" | sed -e 's/[^a-zA-Z0-9._-]/_/g' | tr '[:upper:]' '[:lower:]' | sed -e 's/^[-._]//g' -e 's/[-._]$//g')
-
+      BRANCH_NAME: ${{ github.head_ref || github.ref_name }} 
 
     steps:
     - name: Check out the repository
@@ -49,8 +49,8 @@ jobs:
           --target stage1 \
           --cache-from=type=local,src=/tmp/.buildx-cache \
           --cache-to=type=local,dest=/tmp/.buildx-cache-new,mode=max \
-          --tag rosopensimrt/opensim-rt:${BRANCH}stage1-$(date +%s) \
-          --push .
+          --tag rosopensimrt/opensim-rt:${BRANCH}stage1 \
+           .
 
     - name: Build stage 2 Docker image with cache
       run: |
@@ -59,8 +59,8 @@ jobs:
           --target stage2 \
           --cache-from=type=local,src=/tmp/.buildx-cache \
           --cache-to=type=local,dest=/tmp/.buildx-cache-new,mode=max \
-          --tag rosopensimrt/opensim-rt:${BRANCH}stage2-$(date +%s) \
-          --push .
+          --tag rosopensimrt/opensim-rt:${BRANCH}stage2 \
+           .
 
     - name: Build stage 3 Docker image with cache
       run: |
@@ -69,8 +69,8 @@ jobs:
           --target stage2 \
           --cache-from=type=local,src=/tmp/.buildx-cache \
           --cache-to=type=local,dest=/tmp/.buildx-cache-new,mode=max \
-          --tag rosopensimrt/opensim-rt:${BRANCH}stage2-$(date +%s) \
-          --push .
+          --tag rosopensimrt/opensim-rt:${BRANCH}stage2 \
+           .
 
     - name: Build final stage Docker image with cache
       run: |
@@ -79,7 +79,7 @@ jobs:
           --target final \
           --cache-from=type=local,src=/tmp/.buildx-cache \
           --cache-to=type=local,dest=/tmp/.buildx-cache-new,mode=max \
-          --tag rosopensimrt/opensim-rt:${BRANCH}latest-$(date +%s) \
+          --tag rosopensimrt/opensim-rt:${BRANCH}latest \
           --push .
 
     - name: Update Docker cache
