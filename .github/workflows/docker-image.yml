@@ -48,6 +48,7 @@ jobs:
           --file ./ros.Dockerfile \
           --target stage1 \
           --cache-from=type=local,src=/tmp/.buildx-cache \
+          --cache-from rosopensimrt/opensim-rt:${BRANCH}stage1-$(date +%s) \
           --cache-to=type=local,dest=/tmp/.buildx-cache-new,mode=max \
           --tag rosopensimrt/opensim-rt:${BRANCH}stage1-$(date +%s) \
           --push .
@@ -58,6 +59,7 @@ jobs:
           --file ./ros.Dockerfile \
           --target stage2 \
           --cache-from=type=local,src=/tmp/.buildx-cache \
+          --cache-from rosopensimrt/opensim-rt:${BRANCH}stage2-$(date +%s) \
           --cache-to=type=local,dest=/tmp/.buildx-cache-new,mode=max \
           --tag rosopensimrt/opensim-rt:${BRANCH}stage2-$(date +%s) \
           --push .
@@ -68,6 +70,7 @@ jobs:
           --file ./ros.Dockerfile \
           --target stage2 \
           --cache-from=type=local,src=/tmp/.buildx-cache \
+          --cache-from rosopensimrt/opensim-rt:${BRANCH}stage3-$(date +%s) \
           --cache-to=type=local,dest=/tmp/.buildx-cache-new,mode=max \
           --tag rosopensimrt/opensim-rt:${BRANCH}stage2-$(date +%s) \
           --push .
@@ -78,6 +81,7 @@ jobs:
           --file ./ros.Dockerfile \
           --target final \
           --cache-from=type=local,src=/tmp/.buildx-cache \
+          --cache-from rosopensimrt/opensim-rt:${BRANCH}latest-$(date +%s) \
           --cache-to=type=local,dest=/tmp/.buildx-cache-new,mode=max \
           --tag rosopensimrt/opensim-rt:${BRANCH}latest-$(date +%s) \
           --push .
