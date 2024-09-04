@@ -18,8 +18,9 @@ RUN apt-get update && apt-get install \
 	vim \
 	python \
 	ros-noetic-desktop-full \
-	ros-noetic-rosdoc-lite \
 	ros-noetic-moveit \
+	ros-noetic-plotjuggler-ros \
+	ros-noetic-rosdoc-lite \
 	ros-noetic-rosbridge-server \
 	v4l-utils \
 	catkin-lint \
