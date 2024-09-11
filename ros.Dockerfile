@@ -1,4 +1,4 @@
-FROM ros:noetic-ros-base AS stage1
+FROM rosopensimrt/osrt-full:latest AS stage1
 
 ENV DEBIAN_FRONTEND=noninteractive
 
@@ -39,9 +39,6 @@ ADD scripts/configure_sound.bash /tmp/conf_alsa.bash
 RUN /tmp/conf_alsa.bash
 
 WORKDIR /opt/dependencies
-
-RUN wget https://sourceforge.net/projects/dependencies/files/opensim-core/opensim-core-4.1-ubuntu-18.04.tar.xz && \
-        tar -xvf opensim-core-4.1-ubuntu-18.04.tar.xz && rm opensim-core-4.1-ubuntu-18.04.tar.xz 
 
 RUN  wget https://sourceforge.net/projects/dependencies/files/oscpack/oscpack-ubuntu-18.04.tar.xz && \
         tar -xvf oscpack-ubuntu-18.04.tar.xz && rm oscpack-ubuntu-18.04.tar.xz 
@@ -122,25 +119,9 @@ RUN git clone https://github.com/opensimrt-ros/opensimrt_bridge.git -b devel && 
 
 ENV PYTHONPATH=/opt/ros/noetic/lib/python3/dist-packages/:$PYTHONPATH
 
-#RUN mkdir -p /opensimrt/build/devel/ && \
-#	ln -s /opt/ros/noetic/share/ /opensimrt/build/devel/share && \
-#	ln -s /opt/ros/noetic/include/ /opensimrt/build/devel/include
-
-ENV LD_LIBRARY_PATH=/opt/dependencies/opensim-core/lib/
-#:/opensimrt/build/
-
-#RUN echo "git pull && git checkout permissions && cd /opensimrt/build && bash build.bash" >> ~/.bash_history
-#RUN printf 'export PATH=/nvim/:/root/tmux:$PATH\n' >> ~/.bashrc
-	
-#WORKDIR /opensimrt
-
-#RUN git clone https://github.com/frederico-klein/imu_driver.git -b v0.03ros
-
-#WORKDIR /catkin_opensim/src/opensimrt
-
-#RUN git pull && git checkout permissions 
 #I dont think this variable is set yet
-WORKDIR /opt/dependencies/opensim-core/lib/python3.6/site-packages/
+ENV OPENSIM_PYTHON_DIR=/usr/local/lib/python3.8/site-packages
+WORKDIR ${OPENSIM_PYTHON_DIR}
 RUN python3.8 setup.py install
 WORKDIR /usr/lib/x86_64-linux-gnu
 RUN ln -s libpython3.8.so.1.0 libpython3.6m.so.1.0
@@ -153,7 +134,6 @@ RUN bash /usr/sbin/realsense_install.bash
 RUN mkdir -p -m 0700 /var/run/dbus && chown ${uid}:${gid} /var/run/dbus && chown ${uid}:${gid} -R /catkin_opensim
 
 USER ${uid}
-RUN echo 'export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/opt/dependencies/opensim-core/lib' >> ~/.bashrc
 
 ENV HOME_DIR=/home/${user}
 ADD scripts/vim_configure.bash ${HOME_DIR}/
@@ -169,6 +149,8 @@ RUN printf "source /catkin_ws/devel/setup.bash\nsource /catkin_opensim/devel/set
 
 ###############################################################################################################################################################################################################################################
 FROM stage2 AS stage3
+WORKDIR /catkin_opensim/src/opensimrt_core
+RUN git pull
 WORKDIR /catkin_opensim
 #RUN . /opt/ros/noetic/setup.sh && . /etc/profile.d/opensim_envs.sh && catkin_make ## it's not a session, so it wont load the exports...
 RUN /bin/catkin_build_opensimrt.bash
