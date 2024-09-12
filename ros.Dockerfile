@@ -179,8 +179,8 @@ ADD scripts/bashbar.bash  ${HOME_DIR}/.bash_bar
 RUN echo "source ~/.bash_git" >> ~/.bashrc && \
     echo "source ~/.bash_bar" >> ~/.bashrc && \
     echo "export EDITOR='nv'" >> ~/.bashrc && \
+    echo "alias gedit=\"rosrun tmux_launch tmux_neovim.py\"" >> ~/.bashrc && \
     echo 'export PATH=${PATH}:/catkin_ws/src/tmux_launch/scripts/' >> ~/.bashrc
-
 
 ADD scripts/create_bashrcs.bash ${HOME_DIR}/.create_bashrcs.sh
 RUN bash ~/.create_bashrcs.sh
