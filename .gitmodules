@@ -8,3 +8,6 @@
 [submodule "catkin_devel/src/tmux_launch"]
 	path = catkin_devel/src/tmux_launch
 	url = https://github.com/frederico-klein/tmux_launch.git
+[submodule "opensim_docker"]
+	path = opensim_docker
+	url = git@github.com:opensimrt-ros/opensim_docker.git

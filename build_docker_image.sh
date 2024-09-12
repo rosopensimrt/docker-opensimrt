@@ -26,6 +26,9 @@ elif [ "$(expr substr $(uname -s) 1 5)" == "Linux" ]; then
 	#DOCKER_BUILDKIT=1 docker build . -f Dockerfile.first --progress=tty -t opensim-rt1 --build-arg user=$USER --build-arg group=$(id -g -n) --build-arg uid=$(id -u) --build-arg gid=$(id -g) $@
 	#DOCKER_BUILDKIT=1 docker build . -f Dockerfile.second --progress=tty -t opensim-rt2 --build-arg user=$USER --build-arg group=$(id -g -n) --build-arg uid=$(id -u) --build-arg gid=$(id -g) $@
 	#DOCKER_BUILDKIT=1 docker build . -f Dockerfile.third --progress=tty -t opensim-rt3 --build-arg user=$USER --build-arg group=$(id -g -n) --build-arg uid=$(id -u) --build-arg gid=$(id -g) $@
+	cd opensim_docker
+	DOCKER_BUILDKIT=1 docker build . -f Dockerfile --progress=tty -t ${USERNAME}/osrt-full:$BRANCH 
+	cd ..
 	DOCKER_BUILDKIT=1 docker build . -f ros.Dockerfile --progress=tty -t ${USERNAME}/opensim-rt:$BRANCH --build-arg user=$USER --build-arg group=$(id -g -n) --build-arg uid=$(id -u) --build-arg gid=$(id -g) $@
 
 elif [ "$(expr substr $(uname -s) 1 10)" == "MINGW32_NT" ]; then
