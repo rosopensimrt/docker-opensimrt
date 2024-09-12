@@ -1,6 +1,11 @@
-echo -en '\e]0;Instance session. Can be closed.\a'
+WINDOW_TITLE="[DEVEL]Instance session. Can be closed."
+echo -en "\e]0;${WINDOW_TITLE}\a"
 
-docker exec -it opensimrt_ros_ bash 
+CONTAINER_NAME=${1:-opensimrt_ros_}
+
+shift
+
+docker exec -it -e WINDOW_TITLE="${WINDOW_TITLE}" ${CONTAINER_NAME} bash -l $@
 
 echo -en "\e]0;Terminal\a"
 

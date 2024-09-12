@@ -12,7 +12,9 @@ mkdir -p $CATKIN_WS_DIR/devel
 mkdir -p $CATKIN_WS_DIR/build
 DOCKER_IMAGE_NAME=rosopensimrt/opensim-rt:$BRANCH
 #DOCKER_IMAGE_NAME=rosopensimrt/opensim-rt:devel-all
-echo -en "\e]0;MAIN WINDOW DO NOT CLOSE!!!! [$CATKIN_WS_DIR] $BRANCH\a"
+THIS_WINDOW_TITLE="MAIN WINDOW DO NOT CLOSE!!!! [$CATKIN_WS_DIR] $BRANCH"
+
+echo -en "\e]0;${THIS_WINDOW_TITLE}\a"
 
 #IIRC this is to share the realsense camera
 BUS=$(lsusb | grep 8086 | cut -d " " -f 2)
@@ -86,6 +88,7 @@ elif [ "$(expr substr $(uname -s) 1 5)" == "Linux" ]; then
 		-p 10000:10000/udp \
 		-p 9999:9999 \
 		-p 1030:1030/udp \
+		-e WINDOW_TITLE="${THIS_WINDOW_TITLE}" \
 		-e DISPLAY=unix$DISPLAY -v /tmp/.X11-unix:/tmp/.X11-unix -v /tmp/.docker.xauth:/tmp/.docker.xauth:rw -e XAUTHORITY=/tmp/.docker.xauth \
 		--name=$NAME \
 		--device=/dev/snd:/dev/snd \
