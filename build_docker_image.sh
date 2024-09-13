@@ -6,6 +6,8 @@ sanitize_tag() {
 BRANCH=$(sanitize_tag "$BRANCH_RAW")
 USERNAME=rosopensimrt
 #VIDEOGROUP=$(getent group video | awk -F: '{print $3}')
+USER_ID_THAT_WAS_USED_TO_BUILD_THIS_DOCKER=998
+USER_GID_THAT_WAS_USED_TO_BUILD_THIS_DOCKER=998
 if [ "$(uname)" == "Darwin" ]; then
 	# Do something under Mac OS X platform
 	# I can only run in x86_64 systems, so I should also warn the person.
@@ -29,7 +31,7 @@ elif [ "$(expr substr $(uname -s) 1 5)" == "Linux" ]; then
 	cd opensim_docker
 	DOCKER_BUILDKIT=1 docker build . -f Dockerfile --progress=tty -t ${USERNAME}/osrt-full:$BRANCH 
 	cd ..
-	DOCKER_BUILDKIT=1 docker build . -f ros.Dockerfile --progress=tty -t ${USERNAME}/opensim-rt:$BRANCH --build-arg user=$USER --build-arg group=$(id -g -n) --build-arg uid=$(id -u) --build-arg gid=$(id -g) $@
+	DOCKER_BUILDKIT=1 docker build . -f ros.Dockerfile --progress=tty -t ${USERNAME}/opensim-rt:$BRANCH --build-arg user=$USERNAME --build-arg group=$USERNAME --build-arg uid=${USER_ID_THAT_WAS_USED_TO_BUILD_THIS_DOCKER} --build-arg gid=${USER_ID_THAT_WAS_USED_TO_BUILD_THIS_DOCKER} $@
 
 elif [ "$(expr substr $(uname -s) 1 10)" == "MINGW32_NT" ]; then
 	# Do something under 32 bits Windows NT platform

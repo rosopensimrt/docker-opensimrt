@@ -20,8 +20,20 @@ fi
 export DBUS_SESSION_BUS_ADDRESS=unix:path=$XDG_RUNTIME_DIR
 dbus-daemon --session --address=$DBUS_SESSION_BUS_ADDRESS --nofork --nopidfile --syslog-only &
 
+# inspired by: https://github.com/redis/docker-library-redis/blob/master/Dockerfile.template& https://github.com/redis/docker-library-redis/blob/master/docker-entrypoint.sh
+
+#maybe we can use just the second one for docker --user ?
+
+#usermod -u ${OUTSIDEY_USER_ID} rosopensimrt
+
+trap "chown -R $OUTSIDEY_USER_ID:$OUTSIDEY_USER_ID /catkin_ws" INT
+
+chown -R rosopensimrt:rosopensimrt /catkin_ws
+
 ## Running passed command
 if [[ "$1" ]]; then
-	eval "$@"
+	gosu rosopensimrt:rosopensimrt "$@"
 fi
+
+chown -R $OUTSIDEY_USER_ID:$OUTSIDEY_USER_ID /catkin_ws
 

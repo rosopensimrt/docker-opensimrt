@@ -23,6 +23,11 @@ PORT=$(lsusb | grep 8086 | cut -d " " -f 4 | cut -d ":" -f 1)
 USE_ANDROID_VM=false #true
 BT_DONGLE_VENDOR_ID=0bda:8771
 
+USER_ID_THAT_WAS_USED_TO_BUILD_THIS_DOCKER=998
+USER_GID_THAT_WAS_USED_TO_BUILD_THIS_DOCKER=998
+
+
+
 if [ "$(uname)" == "Darwin" ]; then
 	# Do something under Mac OS X platform
 	# I can only run in x86_64 systems, so I should also warn the person.
@@ -96,11 +101,11 @@ elif [ "$(expr substr $(uname -s) 1 5)" == "Linux" ]; then
 		-v $CATKIN_WS_DIR:/catkin_ws \
 		-v $(pwd)/Data:/srv/host_data \
 		-v $(pwd)/tmux:/usr/local/bin/tmux_session \
-		-v /run/user/${USER_UID}/pulse:/run/user/1000/pulse \
+		-v /run/user/${USER_UID}/pulse:/run/user/${USER_ID_THAT_WAS_USED_TO_BUILD_THIS_DOCKER}/pulse \
 		--volume /dev/bus/usb/$BUS/$PORT:/dev/bus/usb/$BUS/$PORT \
-		-e PULSE_SERVER=unix:/run/user/1000/pulse/native \
+		-e PULSE_SERVER=unix:/run/user/${USER_ID_THAT_WAS_USED_TO_BUILD_THIS_DOCKER}/pulse/native \
+		-e OUTSIDEY_USER_ID=${USER_UID} \
 		$DOCKER_IMAGE_NAME /bin/bash -l
-		#-u 1000:1000
 elif [ "$(expr substr $(uname -s) 1 10)" == "MINGW32_NT" ]; then
 	# Do something under 32 bits Windows NT platform
 	docker run --rm -it \

@@ -192,7 +192,6 @@ ADD scripts/catkin.sh /bin/first_time_catkin_builder.sh
 ADD scripts/set_local_branches.bash /bin/set_local_branches.bash
 #ADD scripts/get_latest_local_branches.bash /bin/get_latest_local_branches.bash
 WORKDIR /catkin_ws
-ADD scripts/entrypoint.sh /bin/entrypoint.sh 
 #RUN apt remove python -y
 #RUN apt install cowsay -y
 
@@ -209,5 +208,13 @@ WORKDIR /catkin_ws
 ADD scripts/banners /etc/banners
 ADD scripts/banners/welcome.sh /etc/profile.d/welcome.sh
 
+USER root
+RUN set -eux; \
+	apt-get update; \
+	apt-get install -y gosu; \
+	rm -rf /var/lib/apt/lists/*; \
+# verify that the binary works
+	gosu nobody true
 
+ADD scripts/entrypoint.sh /bin/entrypoint.sh 
 ENTRYPOINT [ "entrypoint.sh" ]
