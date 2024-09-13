@@ -1,21 +1,36 @@
 # docker opensimrt
 
-![Docker Build Status](https://github.com/opensimrt-ros/docker-opensimrt/actions/workflows/docker-image.yml/badge.svg?branch=devel-all)
+![Docker Build Status](https://github.com/opensimrt-ros/docker-opensimrt/actions/workflows/docker-image.yml/badge.svg?branch=feature/newest_opensim)
 
-This repository contains scripts for building and launching OpenSimRT with a ROS interface. It was based on the [CI yaml from OpenSimRT](https://github.com/mitkof6/OpenSimRT). 
+This repository contains scripts for building and launching OpenSimRT with a ROS interface. It was initially based on the [CI yaml from OpenSimRT](https://github.com/mitkof6/OpenSimRT), but now we are building opensim (4.5.1 at the time this was written) from source. You might want to adapt the components and their versions to your own preferences
 
-While it was meant to be used on Linux, it may be possible to use other Docker for Windows or Mac (see below).
+While it was meant to be used on Linux, it may be possible to use other Docker for Windows or Mac (see below). Also this is building for x86\_64, it may work for arm64 with some changes to the dockerfiles (by using the "FROM --platform=$TARGETPLATFORM <docker-image>"), but i don't have an arm system to test it and i am not going to setup a qemu or a crosscompilation system before there is a strong need for it (to make this run on an android device you would need to install a linux kernel on your phone/tablet to run docker and this is not something most people would be okay doing, so i see little use cases now).
 
-To use it you need to have [docker installed](https://docs.docker.com/get-docker/).
+To use it you need to have [docker installed](https://docs.docker.com/get-docker/). Please either install docker in a rootfull way or the volume mounts won't work by default (it is easy to change the permissions of the folders with the root\_instance.sh script).
 
 ## Newest instructions:
 
 Clone it like this to get everything:
 
-    git clone --recursive -b devel-all git@github.com:opensimrt-ros/docker-opensimrt opensimrt
+    git clone --recursive -b feature/newest_opensim git@github.com:opensimrt-ros/docker-opensimrt opensimrt
+
+## Devices:
+
+Currently tested are only the XIMU3 imu sensors and the Moticon Insoles. The network is simple with every IMU connected to a router and an android device (also connected via wifi to the router) which runs the Moticon app as an intermediate hop between the bluetooth insoles and the router. The data exchange is done with a python script that is an addon component which can be bought from Moticon. This may be the reason for the strange lags we have from the insole data and ideally we would want to make this more streamlined. I tested having a virtual machine and linking the tablet via USB to the pc, but both of those didn't seem to make much of a difference. Maybe my android device is slow. I will publish more data once I measure this more accurately and if I find out what is the best way I will make the appropriate changes. Currently, sometimes the insoles can get up to 7s delays and then normalize. I don't know how to solve it. Likely we want a proper bluetooth linux driver here. 
+
+You may also want to add some delay to the TF reader (maybe like 10-20ms) in IK and physically calibrate the imus with the crosscorrelation algorithm (imu\_delay\_finder package), but i haven't done it, so there might be some bugs there. The IMUs run with stable 2-30ms delays and this is okay for the types of movements we are currently measuring. For faster things, this may be necessary. 
+
+Another improvement that can be done to the network is setting up the linux pc as an AP so you have one less hop in the network. This will also make the whole system portable if you are running this on a laptop pc as I am. I might implement this in the future, it sounds cool. 
+
+Changelog:
+
+12 Sep 24: moved this branch to opensim 4.5.1. Note that I haven't optimized this at all, so it is a massive docker image.  
+
 
 
 #### Everything below here is old. needs to be reviewed and updated.
+
+---
 
 
 Build with :
