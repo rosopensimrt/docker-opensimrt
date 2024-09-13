@@ -20,9 +20,34 @@ Currently tested are only the XIMU3 imu sensors and the Moticon Insoles. The net
 
 You may also want to add some delay to the TF reader (maybe like 10-20ms) in IK and physically calibrate the imus with the crosscorrelation algorithm (imu\_delay\_finder package), but i haven't done it, so there might be some bugs there. The IMUs run with stable 2-30ms delays and this is okay for the types of movements we are currently measuring. For faster things, this may be necessary. 
 
-Another improvement that can be done to the network is setting up the linux pc as an AP so you have one less hop in the network. This will also make the whole system portable if you are running this on a laptop pc as I am. I might implement this in the future, it sounds cool. 
+Another improvement that can be done to the network is setting up the linux pc as an AP so you have one less hop in the network. This will also make the whole system portable if you are running this on a laptop pc as I am. I might implement this in the future, it sounds cool. And if you set the SSID of your PC's wifi AP to the same as the one from the router, you can prevent having to change anything in the IMUs, I think. 
 
-Changelog:
+### How to setup the devices:
+
+- IMUs
+
+You need to change the IPs on the Ximu3s to static ips with the right numbering and maybe also the ports. I don't remember what exactly they are, look into the ximu3 launch files to make sure. Also the whole thing with incoming and outgoing ports is confusing to me, so if they have different IPs, the port can be the same, that probably makes somethings easier, but I didn't do that, i just set different ports for everything so I don't need to think. 
+
+- Insoles
+
+The insoles need to be able to contact the linux pc which will be listening on port 9999 (by default). So in the Moticon App you need to specify the IP for the linux host it's the network valid one for your wifi/ethernet adapter (docker will make a bunch of networking stuff (for virtual interfaces and bridges and so on and this will depend on your setup),  so it will look messy, and you need to know if you are using a wire or the wifi adapter ). do "hostname -I" or if you are getting confused look into "ifconfig" or the network manager/settings pane if you like guis. 
+
+You will need the python SDK from Moticon as well. You need to buy this and the insoles to be able to use our code. This is a python thing reading protobuf messages and I wonder if it can be a source of delay. Python tends to be fast because it often just wraps C code that is fast, but I don't really know. 
+
+Once you have this SDK, you need to copy it to the src/moticon\_insoles/sdk directory of the moticon\_insoles ros package (inside the catkin workspace). I think I wrote on the readme of that package how to do this. Btw, this package is not complete yet. The TFs are incorrect for the IMU driver and it currently will stop you from being able to use this IMU as an orientation source for IK. It is probably not to hard to fix, but changing this will break the current ID code and the URDF gait1992 model that was set to use the incorrect TFs. The insoles are also not rotating the way they should (they are mirrored for some reason), so I also need to figure out why that is. If you want to fix this, be my guest. 
+
+### Running things:
+
+You probably want to start the acquisition state machine from flexbe. There is a bunch of signals that need to happen for things to be initialized properly and I couldn't find an easier way yet to do this, hence this state machine. 
+
+Currently I am using the insole\_upright behavior, but this is bound to change as well. 
+
+
+## Final notes:
+
+It is unfortunate that this system is not small enough for me to be on top of everything that needs to be fixed, so if it's not working, please open an issue so as to let me know. 
+
+## Changelog:
 
 12 Sep 24: moved this branch to opensim 4.5.1. Note that I haven't optimized this at all, so it is a massive docker image.  
 
