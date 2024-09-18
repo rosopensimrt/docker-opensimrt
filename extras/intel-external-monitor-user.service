@@ -1,0 +1,11 @@
+[Unit]
+Description=External Monitor (intel-virtual-output) User Service
+After=graphical.target
+
+[Service]
+ExecStart=/usr/local/bin/intel-monitor-monitoring.sh start
+Type=simple
+
+[Install]
+WantedBy=default.target sleep.target
+
