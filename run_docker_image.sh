@@ -26,7 +26,7 @@ BT_DONGLE_VENDOR_ID=0bda:8771
 USER_ID_THAT_WAS_USED_TO_BUILD_THIS_DOCKER=998
 USER_GID_THAT_WAS_USED_TO_BUILD_THIS_DOCKER=998
 
-USE_HOTSPOT=false # true
+USE_HOTSPOT=true # true
 
 if [ "$(uname)" == "Darwin" ]; then
 	# Do something under Mac OS X platform
@@ -81,7 +81,7 @@ elif [ "$(expr substr $(uname -s) 1 5)" == "Linux" ]; then
 		## I actually need to grep it by the device, right, I am assuming your wlan dev has a w in its device name, hence the grep w, but it should be a variable..
 		myssid=$(nmcli -t -f name,device connection show --active | grep w | cut -d\: -f1)
 		CONNECTION_NAME="x-IMU3 Network(AP)"
-		nmcli con up ${CONNECTION_NAME}
+		nmcli con up "${CONNECTION_NAME}"
 	fi
 	LINE=""
 	for f in $FILES
@@ -114,7 +114,7 @@ elif [ "$(expr substr $(uname -s) 1 5)" == "Linux" ]; then
 		-e OUTSIDEY_USER_ID=${USER_UID} \
 		$DOCKER_IMAGE_NAME /bin/bash -l
 	if [ "$USE_HOTSPOT" = true ]; then
-		nmcli con down ${CONNECTION_NAME}
+		nmcli con down "${CONNECTION_NAME}"
 		nmcli con up $myssid
 	fi
 
