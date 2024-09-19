@@ -27,3 +27,15 @@ That's one less hop and less delays. It also makes the system completely mobile.
 There is a script in extras that creates a hotspot with a fixed ip (this is how we setup the Ximus so I didn't want to change it).
 
 You only need to run the script once (then there will be an entry in /etc/NetworkManager/), but you may want to uncomment the lines that bring it up every time you run run\_docker\_image.sh
+
+
+## Running with docker rootless
+
+I don't know how generic my setup for rootless is, but I managed to make it run by using --network=host in both docker build commands and in the docker run command. You may have to fiddle with the volumes since now the user is actually a subuser, so it may break again. I don't think i tested any volume yet. If I have the time (I wont have the time), I can add a case for rootless, detecting a rootless instance and putting different networking options. 
+
+what I executed was
+
+    $ docker-rootless.sh --iptables=false --max-concurrent-downloads=20
+
+It was not running without the --iptables=false thing
+
