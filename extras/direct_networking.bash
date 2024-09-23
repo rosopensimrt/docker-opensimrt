@@ -2,7 +2,7 @@
 
 
 CONNECTION_NAME='x-IMU3 Network(AP)'
-SSID='x-IMU3 Network 5 GHz'
+SSID='x-IMU3 Network'
 NIC=wlp0s20f3 
 
 ## there must be a secure way to set this up
@@ -28,6 +28,12 @@ if [ "$WANT_THE_ORAGE_ICON" == "true" ]; then
 else
 	nmcli con modify "${CONNECTION_NAME}" ipv4.addresses 192.168.1.1/24 ipv4.method manual
 fi
+
+## I thought I was going to need to change the mac address, but it wasn't necessary
+#nmcli connection modify  "${CONNECTION_NAME}" 802-11-wireless.mac-address 80:C9:55:00:00:00
+#nmcli connection modify  "${CONNECTION_NAME}" 802-11-wireless.channel 44
+#nmcli connection modify  "${CONNECTION_NAME}" 802-11-wireless.band
+
 
 ## I dont think i need this
 #sudo nmcli connection reload 
