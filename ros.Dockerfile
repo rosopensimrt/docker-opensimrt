@@ -1,6 +1,8 @@
 ARG start_with_image=ros:noetic-ros-base 
-
+ARG IS_ROOTLESS=false
 FROM ${start_with_image} AS stage1
+ARG IS_ROOTLESS
+ENV IS_ROOTLESS=${IS_ROOTLESS}
 
 ENV DEBIAN_FRONTEND=noninteractive
 

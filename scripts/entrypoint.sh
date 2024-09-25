@@ -25,13 +25,15 @@ dbus-daemon --session --address=$DBUS_SESSION_BUS_ADDRESS --nofork --nopidfile -
 #maybe we can use just the second one for docker --user ?
 
 #usermod -u ${OUTSIDEY_USER_ID} rosopensimrt
-
+if [ "$IS_ROOTLESS" = "true" ]; then
+	OUTSIDEY_USER_ID=root
+fi
 
 cleanup()
 {
 	echo "attempting cleanup"
 	chown -R $OUTSIDEY_USER_ID:$OUTSIDEY_USER_ID /catkin_ws
-	echo "permissions reset! "
+	echo "permissions reset to $OUTSIDEY_USER_ID! "
 }
 
 trap "cleanup" INT EXIT

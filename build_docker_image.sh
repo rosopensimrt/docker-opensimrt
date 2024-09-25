@@ -79,6 +79,7 @@ elif [ "$(expr substr $(uname -s) 1 5)" == "Linux" ]; then
 			--build-arg group=$USERNAME \
 			--build-arg uid=${USER_ID_THAT_WAS_USED_TO_BUILD_THIS_DOCKER} \
 			--build-arg gid=${USER_ID_THAT_WAS_USED_TO_BUILD_THIS_DOCKER} \
+			--build-arg IS_ROOTLESS=$IS_ROOTLESS \
 			$@
 	"
 
