@@ -1,4 +1,4 @@
-ARG start_with_image
+ARG start_with_image=ros:noetic-ros-base 
 
 FROM ${start_with_image} AS stage1
 
@@ -51,7 +51,7 @@ WORKDIR /opt/dependencies
 RUN if [ "${download_precompiled_opensim}" = true ]; then \
 	wget https://sourceforge.net/projects/dependencies/files/opensim-core/opensim-core-4.1-ubuntu-18.04.tar.xz && \
         tar -xvf opensim-core-4.1-ubuntu-18.04.tar.xz && rm opensim-core-4.1-ubuntu-18.04.tar.xz \
-    fi
+    ;fi
 
 RUN  wget https://sourceforge.net/projects/dependencies/files/oscpack/oscpack-ubuntu-18.04.tar.xz && \
         tar -xvf oscpack-ubuntu-18.04.tar.xz && rm oscpack-ubuntu-18.04.tar.xz 
