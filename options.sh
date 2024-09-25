@@ -56,11 +56,14 @@ fi
 FILES="/dev/video*"
 LINE=""
 
+
 for f in $FILES
 do
+	if [ -e "$f" ]; then
 	#echo "Adding video device $f ..."
 	# take action on each file. $f store current file name
-	LINE="--device=$f:$f $LINE"
+		LINE="--device=$f:$f $LINE"
+	fi
 done
 echo $LINE
 
