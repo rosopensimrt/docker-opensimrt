@@ -26,7 +26,13 @@ dbus-daemon --session --address=$DBUS_SESSION_BUS_ADDRESS --nofork --nopidfile -
 
 #usermod -u ${OUTSIDEY_USER_ID} rosopensimrt
 
-trap "chown -R $OUTSIDEY_USER_ID:$OUTSIDEY_USER_ID /catkin_ws" INT
+
+cleanup()
+{
+	chown -R $OUTSIDEY_USER_ID:$OUTSIDEY_USER_ID /catkin_ws
+}
+
+trap "cleanup" INT EXIT
 
 chown -R rosopensimrt:rosopensimrt /catkin_ws
 
@@ -35,5 +41,4 @@ if [[ "$1" ]]; then
 	gosu rosopensimrt:rosopensimrt "$@"
 fi
 
-chown -R $OUTSIDEY_USER_ID:$OUTSIDEY_USER_ID /catkin_ws
 
