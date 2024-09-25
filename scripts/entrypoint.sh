@@ -29,7 +29,9 @@ dbus-daemon --session --address=$DBUS_SESSION_BUS_ADDRESS --nofork --nopidfile -
 
 cleanup()
 {
+	echo "attempting cleanup"
 	chown -R $OUTSIDEY_USER_ID:$OUTSIDEY_USER_ID /catkin_ws
+	echo "permissions reset! "
 }
 
 trap "cleanup" INT EXIT
