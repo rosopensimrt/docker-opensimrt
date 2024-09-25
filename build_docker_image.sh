@@ -1,14 +1,5 @@
-BRANCH_RAW=$(git branch --show-current )
-## sanitize branch name
-sanitize_tag() {
-    echo "$1" | sed -e 's/[^a-zA-Z0-9._-]/_/g' | tr '[:upper:]' '[:lower:]' | sed -e 's/^[-._]//g' -e 's/[-._]$//g'
-}
-BRANCH=$(sanitize_tag "$BRANCH_RAW")
-USERNAME=rosopensimrt
-#VIDEOGROUP=$(getent group video | awk -F: '{print $3}')
-USER_ID_THAT_WAS_USED_TO_BUILD_THIS_DOCKER=908
-USER_GID_THAT_WAS_USED_TO_BUILD_THIS_DOCKER=908
-COMPLETE_BUILD=true
+#!/bin/bash
+source options.sh
 if [ "$(uname)" == "Darwin" ]; then
 	# Do something under Mac OS X platform
 	# I can only run in x86_64 systems, so I should also warn the person.

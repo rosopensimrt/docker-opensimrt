@@ -1,32 +1,12 @@
 #!/bin/bash
-#BRANCH=latest
-BRANCH_RAW=$(git branch --show-current )
-## sanitize branch name
-sanitize_tag() {
-    echo "$1" | sed -e 's/[^a-zA-Z0-9._-]/_/g' | tr '[:upper:]' '[:lower:]' | sed -e 's/^[-._]//g' -e 's/[-._]$//g'
-}
-BRANCH=$(sanitize_tag "$BRANCH_RAW")
+source options.sh
 NAME=${1:-opensimrt_ros_}
 CATKIN_WS_DIR=${2:-$(pwd)/catkin_ws}
 mkdir -p $CATKIN_WS_DIR/devel
 mkdir -p $CATKIN_WS_DIR/build
-DOCKER_IMAGE_NAME=rosopensimrt/opensim-rt:$BRANCH
-#DOCKER_IMAGE_NAME=rosopensimrt/opensim-rt:devel-all
 THIS_WINDOW_TITLE="MAIN WINDOW DO NOT CLOSE!!!! [$CATKIN_WS_DIR] $BRANCH"
 
 echo -en "\e]0;${THIS_WINDOW_TITLE}\a"
-
-#IIRC this is to share the realsense camera
-BUS=$(lsusb | grep 8086 | cut -d " " -f 2)
-PORT=$(lsusb | grep 8086 | cut -d " " -f 4 | cut -d ":" -f 1)
-
-USE_ANDROID_VM=false #true
-BT_DONGLE_VENDOR_ID=0bda:8771
-
-USER_ID_THAT_WAS_USED_TO_BUILD_THIS_DOCKER=908
-USER_GID_THAT_WAS_USED_TO_BUILD_THIS_DOCKER=908
-
-USE_HOTSPOT=true # true
 
 if [ "$(uname)" == "Darwin" ]; then
 	# Do something under Mac OS X platform
@@ -43,27 +23,16 @@ if [ "$(uname)" == "Darwin" ]; then
 elif [ "$(expr substr $(uname -s) 1 5)" == "Linux" ]; then
 	# Do something under GNU/Linux platform
 
-	# I think this is a linux only issue.
-	DOCKER_DEAMON_PROCESS_OWNER=$(ps aux | grep [d]ockerd | awk '{print $1}')
-	if [ "$DOCKER_DEAMON_PROCESS_OWNER" != "root" ]; then
-		printf "\e[33m\n\tWARNING:\tWhen using docker rootless, the volumes won't mount properly, which means you wont be able to save data.\n\n"
-		printf "\tTo save data, you need to make the volume belong to the subuser that is running inside the container.\n"
-		printf "\tTo do this you need to start a \"root\" instance and use chown -R and set it to the name of the user that was used to build the container\n"
-		printf "\tafter you are done with it you can just chown recursively to your own user outside the docker container.\n\n\e[0m"
-	fi
-
 	# I can only run in x86_64 systems, so I should also warn the person.
 	if [ "$(uname -m)" != "x86_64" ]; then
 		echo "The only currently supported architecture is x86_64. You need to change the ros.Dockerfile to compile everything with this architecture ($(uname -m))."
 		exit
 	fi
-	USER_UID=$(id -u)
 	
 
 	if [ "$USE_ANDROID_VM" = true ]; then #bash is weird...
 		#let's also run the vm for the android device
 		# it doesnt seem to work if the bt dongle is already plugged in, so let's check for that
-		BT_INSERTED=$(lsusb -d $BT_DONGLE_VENDOR_ID)
 		if [[ $BT_INSERTED ]]; then
 			echo "Remove BT device before starting VM..."
 			exit 0
@@ -75,22 +44,12 @@ elif [ "$(expr substr $(uname -s) 1 5)" == "Linux" ]; then
 	#	xauth nlist $DISPLAY | sed -e 's/^..../ffff/' | xauth -f /tmp/.docker.xauth nmerge -
 	xhost +
 
-	FILES="/dev/video*"
 	## remembers current ssid before creating hotspot
 	if [ "$USE_HOTSPOT" = true ]; then
 		## I actually need to grep it by the device, right, I am assuming your wlan dev has a w in its device name, hence the grep w, but it should be a variable..
 		myssid=$(nmcli -t -f name,device connection show --active | grep w | cut -d\: -f1)
-		CONNECTION_NAME="x-IMU3 Network(AP)"
 		nmcli con up "${CONNECTION_NAME}"
 	fi
-	LINE=""
-	for f in $FILES
-	do
-		#echo "Adding video device $f ..."
-		# take action on each file. $f store current file name
-		LINE="--device=$f:$f $LINE"
-	done
-	#echo $LINE
 
 	#not sure if I need to expose these ports, but it is working
 	#docker run --rm -it --network=host \
