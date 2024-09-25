@@ -45,13 +45,12 @@ BT_INSERTED=$(lsusb -d $BT_DONGLE_VENDOR_ID)
 # I think this is a linux only issue.
 DOCKER_DEAMON_PROCESS_OWNER=$(ps aux | grep [d]ockerd | awk '{print $1}')
 
-## if you want to put a warning you can use the syntax below. 
-#if [ "$DOCKER_DEAMON_PROCESS_OWNER" != "root" ]; then
-#	printf "\e[33m\n\tWARNING:\tWhen using docker rootless, the volumes won't mount properly, which means you wont be able to save data.\n\n"
-#	printf "\tTo save data, you need to make the volume belong to the subuser that is running inside the container.\n"
-#	printf "\tTo do this you need to start a \"root\" instance and use chown -R and set it to the name of the user that was used to build the container\n"
-#	printf "\tafter you are done with it you can just chown recursively to your own user outside the docker container.\n\n\e[0m"
-#fi
+if [ "$DOCKER_DEAMON_PROCESS_OWNER" != "root" ]; then
+	printf "\e[33m\n\tWARNING:\tWhen using docker rootless, the volumes don't mount properly, which means you wont be able to change data from the host while the container is running.\n\n"
+	printf "\tTo save data, you need to change the volume belong to the subuser that is running inside the container.\n"
+	printf "\tTo do this you need to start a \"root\" instance and use chown -R and set it to the name of the user that was used to build the container\n"
+	printf "\tafter you are done with it you can just chown recursively to your own user outside the docker container.\n\n\e[0m"
+fi
 
 
 FILES="/dev/video*"
