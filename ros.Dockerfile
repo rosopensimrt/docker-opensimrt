@@ -19,11 +19,6 @@ RUN apt-get update && apt-get install \
 	xz-utils \
 	vim \
 	python \
-	ros-noetic-desktop-full \
-	ros-noetic-moveit \
-	ros-noetic-plotjuggler-ros \
-	ros-noetic-rosdoc-lite \
-	ros-noetic-rosbridge-server \
 	v4l-utils \
 	catkin-lint \
 	iputils-ping \
@@ -31,12 +26,23 @@ RUN apt-get update && apt-get install \
 	pulseaudio \
 	libasound2 \
 	libasound2-plugins \
+	libeigen3-dev \
+	libfprint-2-2 \
 	libpython-all-dev \
-	libeigen3-dev\
-	libudev-dev\
-	libudev1\
+	libudev-dev \
+	libudev1 \
 	tmux \
+	--yes
+
+RUN apt-get install \
+	ros-noetic-desktop-full \
+	ros-noetic-moveit \
+	ros-noetic-plotjuggler-ros \
+	ros-noetic-rosdoc-lite \
+	ros-noetic-rosbridge-server \
 	--yes && rm -rf /var/lib/apt/lists/*
+
+
 ADD scripts/configure_sound.bash /tmp/conf_alsa.bash
 RUN /tmp/conf_alsa.bash
 
@@ -44,7 +50,8 @@ WORKDIR /opt/dependencies
 
 RUN if [ "${download_precompiled_opensim}" = true ]; then \
 	wget https://sourceforge.net/projects/dependencies/files/opensim-core/opensim-core-4.1-ubuntu-18.04.tar.xz && \
-        tar -xvf opensim-core-4.1-ubuntu-18.04.tar.xz && rm opensim-core-4.1-ubuntu-18.04.tar.xz 
+        tar -xvf opensim-core-4.1-ubuntu-18.04.tar.xz && rm opensim-core-4.1-ubuntu-18.04.tar.xz \
+    fi
 
 RUN  wget https://sourceforge.net/projects/dependencies/files/oscpack/oscpack-ubuntu-18.04.tar.xz && \
         tar -xvf oscpack-ubuntu-18.04.tar.xz && rm oscpack-ubuntu-18.04.tar.xz 
