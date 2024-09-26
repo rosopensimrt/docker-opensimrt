@@ -10,4 +10,5 @@
 	url = https://github.com/frederico-klein/tmux_launch.git
 [submodule "opensim_docker"]
 	path = opensim_docker
-	url = git@github.com:opensimrt-ros/opensim_docker.git
+	url = https://github.com/opensimrt-ros/opensim_docker.git
+	pushurl = git@github.com:opensimrt-ros/opensim_docker.git
