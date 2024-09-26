@@ -50,10 +50,12 @@ elif [ "$(expr substr $(uname -s) 1 5)" == "Linux" ]; then
 		myssid=$(nmcli -t -f name,device connection show --active | grep w | cut -d\: -f1)
 		nmcli con up "${CONNECTION_NAME}"
 	fi
-
+	EXTRA_OPTIONS=""
+	if [ "$IS_ROOTLESS" = true ]; then
+		EXTRA_OPTIONS=--network=host
+	fi
 	#not sure if I need to expose these ports, but it is working
-	#docker run --rm -it --network=host \
-	docker run --rm -it \
+	docker run --rm -it $EXTRA_OPTIONS \
 		-p 9000:9000/udp \
 		-p 8001:8001/udp \
 		-p 10000:10000/udp \
