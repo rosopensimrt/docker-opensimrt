@@ -17,14 +17,20 @@ else
 	#mkdir -p $XDG_RUNTIME_DIR
 fi
 
+## I should get this from options//
+DOCKER_USER_NAME=rosopensimrt
+
 export DBUS_SESSION_BUS_ADDRESS=unix:path=$XDG_RUNTIME_DIR
-dbus-daemon --session --address=$DBUS_SESSION_BUS_ADDRESS --nofork --nopidfile --syslog-only &
+gosu $DOCKER_USER_NAME:$DOCKER_USER_NAME dbus-daemon --session --address=$DBUS_SESSION_BUS_ADDRESS --nofork --nopidfile --syslog-only &
+#dbus-daemon --session --address=$DBUS_SESSION_BUS_ADDRESS --nofork --nopidfile --syslog-only &
 
 # inspired by: https://github.com/redis/docker-library-redis/blob/master/Dockerfile.template& https://github.com/redis/docker-library-redis/blob/master/docker-entrypoint.sh
 
 #maybe we can use just the second one for docker --user ?
 
-#usermod -u ${OUTSIDEY_USER_ID} rosopensimrt
+#usermod -u ${OUTSIDEY_USER_ID} $DOCKER_USER_NAME
+
+ACTUAL_USER_ID=$OUTSIDEY_USER_ID
 if [ "$IS_ROOTLESS" = "true" ]; then
 	OUTSIDEY_USER_ID=root
 fi
@@ -32,17 +38,19 @@ fi
 cleanup()
 {
 	echo "attempting cleanup"
+	chown -R $OUTSIDEY_USER_ID:$OUTSIDEY_USER_ID /srv/host_data
 	chown -R $OUTSIDEY_USER_ID:$OUTSIDEY_USER_ID /catkin_ws
-	echo "permissions reset to $OUTSIDEY_USER_ID! "
+	echo "permissions reset to $ACTUAL_USER_ID! "
 }
 
 trap "cleanup" INT EXIT
 
-chown -R rosopensimrt:rosopensimrt /catkin_ws
+chown -R $DOCKER_USER_NAME:$DOCKER_USER_NAME /srv/host_data
+chown -R $DOCKER_USER_NAME:$DOCKER_USER_NAME /catkin_ws
 
 ## Running passed command
 if [[ "$1" ]]; then
-	gosu rosopensimrt:rosopensimrt "$@"
+	gosu $DOCKER_USER_NAME:$DOCKER_USER_NAME "$@"
 fi
 
 

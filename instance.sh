@@ -5,7 +5,7 @@ CONTAINER_NAME=${1:-opensimrt_ros_}
 
 shift
 
-docker exec -it -e WINDOW_TITLE="${WINDOW_TITLE}" ${CONTAINER_NAME} bash -l $@
+docker exec -it -e WINDOW_TITLE="${WINDOW_TITLE}" ${CONTAINER_NAME} gosu rosopensimrt:rosopensimrt bash -l $@
 
 echo -en "\e]0;Terminal\a"
 
