@@ -50,7 +50,7 @@ chown -R $DOCKER_USER_NAME:$DOCKER_USER_NAME /catkin_ws
 
 ## Running passed command
 if [[ "$1" ]]; then
-	gosu $DOCKER_USER_NAME:$DOCKER_USER_NAME "$@"
+	gosu $DOCKER_USER_NAME "$@"
 fi
 
 
