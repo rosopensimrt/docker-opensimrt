@@ -42,7 +42,7 @@ elif [ "$(expr substr $(uname -s) 1 5)" == "Linux" ]; then
 	fi
 	## slightly better alternative, it was working, but stopped, going back to open everything
 	#	xauth nlist $DISPLAY | sed -e 's/^..../ffff/' | xauth -f /tmp/.docker.xauth nmerge -
-	xhost +
+	xhost +local:docker
 
 	## remembers current ssid before creating hotspot
 	if [ "$USE_HOTSPOT" = true ]; then

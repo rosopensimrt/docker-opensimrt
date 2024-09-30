@@ -19,7 +19,7 @@ USER_GID_THAT_WAS_USED_TO_BUILD_THIS_DOCKER=908
 COMPLETE_BUILD=true
 SUFFIX=_complete
 
-USE_HOTSPOT=true #false # true
+USE_HOTSPOT=false #false # true
 CONNECTION_NAME="x-IMU3 Network(AP)"
 
 #IIRC this is to share the realsense camera
