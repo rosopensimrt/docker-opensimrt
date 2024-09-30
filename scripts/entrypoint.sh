@@ -35,11 +35,21 @@ if [ "$IS_ROOTLESS" = "true" ]; then
 	OUTSIDEY_USER_ID=root
 fi
 
+## this will maybe prevent apps outside to work :(
+dirs_to_share=(
+"/srv/host_data"
+"/catkin_ws"
+"/tmp/.X11-unix"
+)
+#"/dev/snd"
+#"/dev/dri"
+
 cleanup()
 {
 	echo "attempting cleanup"
-	chown -R $OUTSIDEY_USER_ID:$OUTSIDEY_USER_ID /srv/host_data
-	chown -R $OUTSIDEY_USER_ID:$OUTSIDEY_USER_ID /catkin_ws
+	for some_dir in ${dirs_to_share[@]}; do
+		chown -R $OUTSIDEY_USER_ID:$OUTSIDEY_USER_ID $some_dir
+	done
 	echo "permissions reset to $ACTUAL_USER_ID! "
 }
 
