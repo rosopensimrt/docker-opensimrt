@@ -39,3 +39,18 @@ what I executed was
 
 It was not running without the --iptables=false thing
 
+## we want to accept external commands by default, so we change the default on this file:
+
+    sed -i "s/'commands_enabled': false/'commands_enabled': true/" catkin_devel/src/ros_biomech/acquisition_state_machines/flexbe_app/src/ui/ui_settings.js
+	
+Then run this:
+
+    roslaunch acquisition_of_raw_data flexbe_all_tmux.launch
+
+    rostopic pub /flexbe/uicommand flexbe_msgs/UICommand "command: 'load acquire_imu_and_ik' key: ''"
+	
+After you changed the ui\_settings.js file you can also just use
+
+    ./start_me.sh
+
+That does everything.

@@ -55,7 +55,7 @@ elif [ "$(expr substr $(uname -s) 1 5)" == "Linux" ]; then
 		EXTRA_OPTIONS=--network=host
 	fi
 	#not sure if I need to expose these ports, but it is working
-	docker run --rm -it $EXTRA_OPTIONS \
+	docker run --rm -it $EXTRA_OPTIONS --network=host \
 		-p 9000:9000/udp \
 		-p 8001:8001/udp \
 		-p 10000:10000/udp \
