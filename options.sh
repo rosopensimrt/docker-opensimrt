@@ -14,8 +14,10 @@ USE_ANDROID_VM=false #true
 BT_DONGLE_VENDOR_ID=0bda:8771
 
 USERNAME=rosopensimrt
-USER_ID_THAT_WAS_USED_TO_BUILD_THIS_DOCKER=908
-USER_GID_THAT_WAS_USED_TO_BUILD_THIS_DOCKER=908
+
+# Why? Because there are some things, like dbus that we can't chmod to belong to the docker user, so if we just keep the same number, it should just work.
+USER_ID_THAT_WAS_USED_TO_BUILD_THIS_DOCKER=$(id -u) #1000
+USER_GID_THAT_WAS_USED_TO_BUILD_THIS_DOCKER=$(id -u) #1000
 COMPLETE_BUILD=true
 SUFFIX=_complete
 
