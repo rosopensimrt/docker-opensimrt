@@ -67,7 +67,7 @@ RUN  wget https://sourceforge.net/projects/dependencies/files/vicon/ViconDataStr
 
 #RUN echo "I use this to make it get stuff from git again"
 
-RUN git clone https://github.com/mysablehats/OpenSimRT_data.git /srv/data
+RUN git clone --depth=1 https://github.com/mysablehats/OpenSimRT_data.git /srv/data
 
 FROM stage1 AS stage2
 ARG user=osruser1
