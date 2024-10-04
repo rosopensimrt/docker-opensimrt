@@ -229,7 +229,8 @@ RUN set -eux; \
 # verify that the binary works
 	gosu nobody true
 
-RUN mkdir -p -m 0700 /var/run/dbus && chown ${uid}:${gid} /var/run/dbus
+RUN mkdir -p -m 0700 /var/run/dbus        && chown ${uid}:${gid} /var/run/dbus &&\
+    mkdir -p -m 0700 /var/run/user/${uid} && chown ${uid}:${gid} /var/run/user/${uid} 
 
 ADD scripts/entrypoint.sh /bin/entrypoint.sh 
 ENTRYPOINT [ "entrypoint.sh" ]
