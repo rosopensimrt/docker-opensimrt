@@ -10,6 +10,9 @@
 
 #BRANCH=latest
 
+## to connect with vicon and not having to deal with routing tables, it is just easier to use the host network
+USE_HOST_NETWORK=true
+
 USE_ANDROID_VM=false #true
 BT_DONGLE_VENDOR_ID=0bda:8771
 
